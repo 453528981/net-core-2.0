@@ -8,23 +8,22 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="wwwroot\" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+    <!--
     <PackageReference Include="Microsoft.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.0.0" />   
-    
-    
-   
+    -->
+
+
   </ItemGroup>
-  
+
   <ItemGroup>
-    <ProjectReference Include="..\..\Module\Ayatta.Api\Ayatta.Api.csproj" />
-    <ProjectReference Include="..\..\Module\Ayatta.Cart\Ayatta.Cart.csproj" />
     <ProjectReference Include="..\..\Module\Ayatta.Domain\Ayatta.Domain.csproj" />
     <ProjectReference Include="..\..\Module\Ayatta.OAuth\Ayatta.OAuth.csproj" />
     <ProjectReference Include="..\..\Module\Ayatta.OnlinePay\Ayatta.OnlinePay.csproj" />
@@ -32,7 +31,7 @@
     <ProjectReference Include="..\..\Module\Ayatta.Storage\Ayatta.Storage.csproj" />
     <ProjectReference Include="..\..\Module\Ayatta\Ayatta.csproj" />
   </ItemGroup>
-  
-  <Import Project="..\Shared\Ayatta.Web.projitems" Label="Shared" /> 
+
+  <Import Project="..\Shared\Ayatta.Web.projitems" Label="Shared" />
 
 </Project>

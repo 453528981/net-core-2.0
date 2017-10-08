@@ -10,7 +10,7 @@ using Microsoft.Extensions.Caching.Distributed;
 
 namespace Ayatta.Web.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public abstract class BaseController : AbstractController
     {
         public new Identity User

@@ -48,7 +48,7 @@ namespace Ayatta.Web
                 options.Cookie.Name = "x-session";
             });
 
-            services.AddCart();
+            
             services.AddMvc();
         }
 

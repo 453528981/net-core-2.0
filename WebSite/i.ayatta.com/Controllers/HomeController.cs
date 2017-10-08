@@ -14,18 +14,12 @@ namespace Ayatta.Web.Controllers
         {
         }
 
-        [HttpGet("/")]
-        public IActionResult Index()
+        [HttpGet("test")]
+        public IActionResult Test()
         {
-            var ci = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
-            ci.AddClaim(new Claim(ClaimTypes.Name, "3"));
-            ci.AddClaim(new Claim(ClaimTypes.NameIdentifier, "13718414243"));
-
-            var cp = new ClaimsPrincipal(ci);
-
-            HttpContext.Authentication.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, cp);
-            return View();
+            return Content("test");
         }
+       
 
         public IActionResult Profile()
         {
