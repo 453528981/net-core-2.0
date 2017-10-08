@@ -196,7 +196,7 @@ namespace Ayatta.Web.Controllers
             if (string.IsNullOrEmpty(guid))
             {
                 guid = User.Id > 0 ? User.Guid : Guid.NewGuid().ToString();
-                Response.Cookies.Append("x-cart", guid, new CookieOptions { HttpOnly = true, Expires = DateTime.Now.AddDays(3) });
+                Response.Cookies.Append("x-cart", guid, new CookieOptions { Domain = WebSite.CookieDomain, HttpOnly = true, Expires = DateTime.Now.AddDays(3) });
                 return cartManager.GetCart(guid, platform);
             }
 
@@ -206,7 +206,7 @@ namespace Ayatta.Web.Controllers
                 var status = cart.Merge(guid);
                 if (status)
                 {
-                    Response.Cookies.Append("x-cart", User.Guid, new CookieOptions { HttpOnly = true, Expires = DateTime.Now.AddDays(3) });
+                    Response.Cookies.Append("x-cart", User.Guid, new CookieOptions {Domain=WebSite.CookieDomain, HttpOnly = true, Expires = DateTime.Now.AddDays(3) });
                 }
                 return cart;
             }

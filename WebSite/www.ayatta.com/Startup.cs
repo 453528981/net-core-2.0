@@ -39,10 +39,10 @@ namespace Ayatta.Web
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
-                    options.Cookie.Domain = "www.ikeepme.com";// WebSite.CookieDomain;
+                    options.Cookie.Domain =WebSite.CookieDomain;
                     options.Cookie.Name = "x-auth";
                     options.Cookie.HttpOnly = true;
-                    options.CookieDomain = "www.ikeepme.com";
+                   
                     options.Cookie.Path = "/";
                     
                     options.LoginPath = "/sign-in";

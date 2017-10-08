@@ -28,7 +28,13 @@ namespace Ayatta.Web
             //services.AddMediatR(typeof(BaseEvent).GetTypeInfo().Assembly);
             services.Configure<StorageOptions>(Configuration.GetSection("ConnectionStrings"));
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+             {
+                 options.Cookie.Domain = WebSite.CookieDomain;
+                 options.Cookie.Name = "x-auth";
+                 options.Cookie.HttpOnly = true;
+             });
 
             services.AddAntiforgery(options =>
             {
@@ -48,7 +54,7 @@ namespace Ayatta.Web
                 options.Cookie.Name = "x-session";
             });
 
-            
+
             services.AddMvc();
         }
 
