@@ -1,0 +1,79 @@
+﻿@model Result<OrderStatus>
+<div>
+
+    @using (Html.BeginForm())
+    {
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                &times;
+            </button>
+            <h4 class="modal-title">
+                取消订单
+            </h4>
+        </div>
+        <div class="modal-body">
+            @if (Model.Status)
+            {
+                <p>
+                    您确定要取消该订单吗？取消订单后，不能恢复。
+                </p>
+
+                <p>
+                    <span>取消原因：</span>
+                    <select name="reason" class="form-control">
+                        <option value="我不想买了">我不想买了</option>
+                        <option value="信息填写错误，重新拍">信息填写错误，重新拍</option>
+                        <option value="卖家缺货">卖家缺货</option>
+                        <option value="同城见面交易">同城见面交易</option>
+                        <option value="其他原因">其他原因</option>
+                    </select>
+                </p>
+            }
+            else
+            {
+                <div class="status-box status-box-warm-error">
+                    <div class="status-icon">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <i class="icon-remove-sign icon-3x"></i>
+                            </div>
+                            <div class="col-md-10">
+                                <strong>@Model.Message</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="modal-footer">
+            <p id="message" class="pull-left color-red">
+            </p>
+            @if (Model.Status)
+            {
+                <button type="button" class="btn btn-primary" onclick="submitForm(this.form)">
+                    确 认
+                </button>
+            }
+        </div>
+    }
+
+</div>
+@if (Model.Status)
+{
+    <script type="text/javascript">
+        function submitForm(form) {
+            var param = $(form).serialize();
+            $.postJSON(form.action, param, function (result) {
+                if (result.status == false) {
+                    $('#message', form).css('color', 'red').html(result.Message);
+                }
+                else {
+                    $('#message', form).css('color', 'green').html("取消订单成功！");
+                }
+            });
+        }
+        $(function () {
+            $('select').select2();
+        });
+    </script>
+}

@@ -1,0 +1,132 @@
+﻿<div class="container">
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>
+                绑定手机
+                <small class="c-red">
+
+                </small>
+            </h2>
+        </div>
+        <div class="card-body card-padding">
+
+            @using (Html.BeginForm(FormMethod.Post))
+            {
+                <div id="form-group-for-mobile" class="form-group">
+                    <div class="input-group">
+                        <input id="mobile" name="mobile" type="text" class="form-control" maxlength="11"
+                               placeholder="手机号码" />
+                        <span class="input-group-btn">
+                            <button class="btn btn-info" type="button" onclick="getSmsCaptcha(this);">
+                                获取短信验证码
+                            </button>
+                        </span>
+                    </div>
+                    <p id="help-block-for-mobile" class="help-block">
+                        请输入您有效的手机号码！
+                    </p>
+                </div>
+                <div id="form-group-for-captcha" class="form-group" style="display: none;">
+                    <div class="input-group">
+                        <input id="guid" name="guid" type="hidden" />
+                        <input id="captcha" name="captcha" max="6" type="text" class="form-control" placeholder="短信验证码" />
+                        <span class="input-group-btn">
+                            <button id="btn-mobile-bind" class="btn btn-primary" type="button" disabled onclick="submitForm(this);"
+                                    data-default-text="绑定该手机号码" data-loading-text="绑定验证中..." data-success-text="绑定成功">
+                                绑定该手机号码
+                            </button>
+                        </span>
+                    </div>
+                    <p id="help-block-for-authcode" class="help-block">
+                        请输入接收到的手机短信验证码！
+                    </p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+@section css{
+}
+@section js{
+    <script type="text/javascript">
+
+        function getSmsCaptcha(btn) {
+            //var form = btn.form;
+            //var param = $(form)[0].mobile;//.serialize();
+            //console.log(param);
+            var mobile = $('#mobile').val();
+            /*
+            if (!mobile.isMobile()) {
+                $('#help-block-for-mobile').html("请输入正确的手机号码！");
+                $('#form-group-for-mobile').removeClass('has-success').addClass('has-error');
+                return;
+            }
+            */
+
+            $.postJSON('/security/sms-captcha-send', { mobile: mobile }, function (r) {
+                if (r.status) {
+
+                    var counter = 10;
+                    btn.disabled = true;
+                    var interval = window.setInterval(function () {
+                        if (counter > 0) {
+                            counter -= 1;
+                            btn.innerHTML = counter + "秒后重新获取";
+                        } else {
+                            clearInterval(interval);
+                            btn.removeAttribute('disabled');
+                            btn.innerHTML = "获取短信验证码";
+                        }
+                    }, 1000);
+
+
+                    $("#guid").val(r.message);
+                    document.getElementById('btn-mobile-bind').removeAttribute('disabled');
+
+                    $("#form-group-for-mobile").hide();
+                    $("#form-group-for-captcha").show();
+
+                    $('#form-group-for-mobile').removeClass('has-success').removeClass('has-error');
+                } else {
+                    $('#help-block-for-mobile').html(r.message);
+                    $('#form-group-for-mobile').removeClass('has-success').addClass('has-error');
+                }
+            });
+
+        }
+        function submitForm(btn) {
+            var form = btn.form;
+            var guid = $('#guid').val();
+            var mobile = $('#mobile').val();            
+            var captcha = $('#captcha').val();
+            if (!mobile.isMobile()) {
+                
+                $("#form-group-for-captcha").hide();
+                $('#help-block-for-mobile').html("请输入正确的手机号码！");
+                $('#form-group-for-mobile').removeClass('has-success').addClass('has-error').show();;
+                return;
+            }
+            if (captcha.isEmpty()) {
+                $('#help-block-for-captcha').html("请输入接收到的手机短信验证码！");
+                $('#form-group-for-captcha').removeClass('has-success').addClass('has-error');
+                return;
+            }
+
+            $(btn).button('loading');
+            var param = $(form).serialize();
+
+            $.postJSON(form.action, param, function (r) {
+                if (r.status) {
+                    $(btn).button('success');
+                }
+                else {
+                    $(btn).button('default');
+                    $('#help-block-for-captcha').html(result.Message);
+                    $('#form-group-for-captcha').removeClass('has-success').addClass('has-error');
+                }
+            });
+        }
+    </script>
+}

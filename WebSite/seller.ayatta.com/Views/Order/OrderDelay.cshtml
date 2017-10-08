@@ -1,0 +1,61 @@
+﻿@model MagicKit<Order>
+@using (Html.BeginForm())
+{
+    <div class="modal-body">
+        @if (Model.Status)
+        {
+            <p>
+                延长收货时间可以让买家有更多时间来“确定收货”，而不会急于去申请退款。</p>
+            <p>
+                <strong>延长本交易的“确认收货”期限为：</strong></p>
+            <p>
+                <select name="day">
+                    <option value="3">3天</option>
+                    <option value="5">5天</option>
+                    <option value="7">7天</option>
+                    <option value="10">10天</option>
+                </select></p>
+        }
+        else
+        {
+            <div class="status-box status-box-warm-error">
+                <div class="status-icon">
+                    <div class="row-fluid">
+                        <div class="span2">
+                            <i class="icon-remove-sign icon-3x"></i>
+                        </div>
+                        <div class="span10">
+                            <strong>@Model.Message</strong></div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="modal-footer">
+        <p id="message" class="pull-left color-red">
+        </p>
+        <a class="btn" href="#" data-dismiss="modal">关闭</a>
+        @if (Model.Status)
+        {
+            <button type="button" class="btn btn-primary" onclick="submitMemo(this.form)">
+                确 认</button>
+        }
+    </div>
+}
+@if (Model.Status)
+{
+    <script type="text/javascript">
+        function submitMemo(form) {
+            var param = $(form).serialize();
+            $.postJSON(form.action, param, function (result) {
+                if (result.Status == false) {
+                    $('#message').css('color', 'red').html(result.Message);
+                }
+                else {
+                    $('#message').css('color', 'green').html("延长收货时间成功！");
+                    setTimeout(function () { window.location.reload(); }, 1000);
+                }
+            });
+        }
+    </script>
+}

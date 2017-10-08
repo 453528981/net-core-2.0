@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Api\Auth.cs" />
+    <Compile Remove="Api\Comment.cs" />
+    <Compile Remove="Api\Consultation.cs" />
+    <Compile Remove="Api\IRequest.cs" />
+    <Compile Remove="Api\IResponse.cs" />
+    <Compile Remove="Api\Item.cs" />
+    <Compile Remove="Api\Misc.cs" />
+    <Compile Remove="Api\Request.cs" />
+    <Compile Remove="Api\Response.cs" />
+    <Compile Remove="Api\Sms.cs" />
+    <Compile Remove="Api\User.cs" />
+    <Compile Remove="Api\UserAddress.cs" />
+    <Compile Remove="Api\UserFavorite.cs" />
+    <Compile Remove="Api\UserSignin.cs" />
+    <Compile Remove="Controllers\AuthController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+  <ItemGroup>
+    
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.0.0" />
+    <PackageReference Include="protobuf-net" Version="2.3.2" />
+    <PackageReference Include="Dapper" Version="1.50.2" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\Module\Ayatta.Api\Ayatta.Api.csproj" />
+    <ProjectReference Include="..\..\Module\Ayatta.Cart\Ayatta.Cart.csproj" />
+    <ProjectReference Include="..\..\Module\Ayatta.Domain\Ayatta.Domain.csproj" />
+    <ProjectReference Include="..\..\Module\Ayatta.OnlinePay\Ayatta.OnlinePay.csproj" />
+    <ProjectReference Include="..\..\Module\Ayatta.Sms\Ayatta.Sms.csproj" />
+    <ProjectReference Include="..\..\Module\Ayatta.Storage\Ayatta.Storage.csproj" />
+    <ProjectReference Include="..\..\Module\Ayatta\Ayatta.csproj" />
+  </ItemGroup>
+  
+  <Import Project="..\Shared\Ayatta.Web.projitems" Label="Shared" />  
+
+</Project>

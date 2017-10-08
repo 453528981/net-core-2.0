@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>cdb18478-962f-4445-ac75-5c2b07769556</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Ayatta.Web</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Asset.Base.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Asset.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Asset.Script.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Asset.Style.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controllers\AbstractController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controllers\SharedController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ClaimsPrincipalExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\DistributedCacheExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IAsset.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Identity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Model.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WebSite.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Weed.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WeedFs.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Helpers\" />
+  </ItemGroup>
+</Project>

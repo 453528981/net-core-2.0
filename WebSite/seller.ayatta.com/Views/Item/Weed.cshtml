@@ -1,0 +1,69 @@
+﻿@model WeedFile
+<div class="table-responsive">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            &times;
+        </button>
+        <h4 class="modal-title">
+            选择图片
+        </h4>
+    </div>
+    <div class="modal-body">
+        <ol class="breadcrumb" style="padding:10px 0;">
+            <li><a data-trigger="modal" href="/weed">目录</a></li>
+            @{ var crumb = ""; var i = 0; var array = Model.Path.Trim('/').Split('/');}
+            @foreach (var o in array)
+            {
+                crumb += o + "/";
+                if (i == array.Length - 1)
+                {
+                    <li class="active">@(o)</li>
+                }
+                else
+                {
+                    <li><a data-trigger="modal" href="/weed?dir=@(crumb)">@(o)</a></li>
+                }
+                i++;
+            }
+        </ol>
+        <ul>
+            <li>
+                <form action='/item/upload/10?path=@(Model.Path)' method="POST" target='frame-upload' enctype='multipart/form-data'
+                      style="">
+                    <span>
+                        <input type="file" name="image" class="input-file" onchange="imageUpload(this);" />
+                    </span>
+                    <iframe name='frame-upload' style='display: none;width:0;height:0;' frameborder="0" marginheight="0" marginwidth="0" src="about:blank"></iframe>
+                </form>
+            </li>
+            @if (Model.Directories != null)
+            {
+                @foreach (var o in Model.Directories)
+                {
+                    <li><a data-trigger="modal" href="/weed?dir=@(Model.Path+o.Name)/">@(o.Name)</a></li>
+                }
+            }
+            @if (Model.Files != null)
+            {
+                @foreach (var o in Model.Files)
+                {
+                    <li style="float:left;width:80px;height:80px;">
+                        <a title="@(o.Name)">
+                            <img src="http://localhost:8080/@(o.Fid)" style="width:56px;height:56px;" />
+                        </a>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="submitForm(this)">
+            保 存
+        </button>
+    </div>
+</div>
+<script>
+    function imageUpload(obj) {
+        $(obj.form).submit();
+    }
+</script>

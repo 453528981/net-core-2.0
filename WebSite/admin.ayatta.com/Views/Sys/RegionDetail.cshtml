@@ -1,0 +1,99 @@
+﻿@model Model<Region>
+
+<div class="card">
+    <div class="card-header ch-alt">
+        <h2>行政区 </h2>
+    </div>
+    <div class="card-body card-padding">
+        @using (Html.BeginForm())
+        {
+            <div class="form-group">
+                <div class="fg-line">
+                    <label for="input-Id">Id</label>
+                    <p class="form-control-static">@(Model.Data.Id)</p>
+                    @*<input id="input-Id" name="Id" type="text" class="form-control" maxlength="3" value="@(Model.Data.Id)" placeholder="Id">*@
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="fg-line">
+                    <label for="input-ParentId">父Id</label>
+                    <input id="input-ParentId" name="ParentId" type="text" class="form-control" maxlength="3" value="@(Model.Data.ParentId)" placeholder="父Id">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="fg-line">
+                    <label for="input-Name">名 称</label>
+                    <input id="input-Name" name="Name" type="text" class="form-control" maxlength="20" value="@(Model.Data.Name)" placeholder="名称">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="fg-line">
+                    <label for="input-PostalCode">邮政编码</label>
+                    <input id="input-PostalCode" name="PostalCode" type="text" class="form-control" maxlength="10" value="@(Model.Data.PostalCode)" placeholder="邮政编码">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="fg-line">
+                    <label for="input-Priority">排序</label>
+                    <input id="input-Priority" name="Priority" type="text" class="form-control" maxlength="2" value="@(Model.Data.Priority)" placeholder="排序">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="fg-line">
+                    <label for="input-Status">状态</label>
+                    <select id="input-Status" name="Status" class="form-control">
+                        @{ var selected = Model.Data.Status ? "selected=selected" : string.Empty;}
+                        <option value="True" @(selected)>可用</option>
+                        <option value="False" @(selected)>不可用</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="button" class="btn btn-primary btn-lg btn-block waves-effect" onclick="submitForm(this);" data-loading-text="提交中...">
+                    提 交
+                </button>
+            </div>
+        }
+    </div>
+
+</div>
+
+
+@section js{
+
+    <script type="text/javascript">
+
+        function submitForm(btn) {
+            var form = btn.form;
+            $(btn).button('loading');
+            var param = $(form).serialize();
+            $.post(form.action, param, function (r) {
+                console.log(r);
+                if (result.status) {
+                    $(btn).button('reset');
+                    //notify('操作成功', 'success');
+                    /*
+                    if (result.Extra != null && result.Extra != "") {
+                        alert(result.Extra + "不存在");
+                    }
+                    if (result.Data != null) {
+                        setTimeout(function () {
+                            window.location = "/Trial/TrialPlanDetail/" + result.Data;
+                        }, 500);
+                    } else {
+                        window.location.reload();
+                    }
+                    */
+                }
+                else {
+                    $(btn).button('reset');
+                    //notify(result.Message, 'danger');
+                }
+            }, "json");
+            return false;
+        }
+    </script>
+}

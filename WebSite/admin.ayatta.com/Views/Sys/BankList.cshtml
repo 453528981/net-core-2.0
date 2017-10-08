@@ -1,0 +1,93 @@
+﻿@model BankListModel
+<div class="container">
+    <div class="card">
+        @using (Html.BeginForm())
+        {
+            <div class="card-header ch-alt">
+                <h2>银行 列表</h2>
+                <ul class="actions">
+                    <li>
+                        <a href="/sys/bank-detail/" title="添加">
+                            <i class="zmdi zmdi-plus c-red"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>名称</th>
+                                <th>描述</th>
+                               
+                                <th>排序</th>
+                                <th>状态</th>
+                                <th>创建时间</th>
+                                <th>操 作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var o in Model.Banks)
+                            {
+                                <tr>
+                                    <td>
+                                        @(o.Id)
+                                    </td>
+                                    <td>@(o.Name)</td>
+                                    <td>
+                                        @(o.Description)
+                                    </td>
+
+                                   
+                                    <td>
+                                        @(o.Priority)
+                                    </td>
+                                    <td>
+                                        @(o.Status)
+                                    </td>
+                                    <td>
+                                        @(o.CreatedOn.ToString("yyyy-MM-dd HH:mm:ss"))
+                                    </td>
+                                    <td>
+                                        <a href="~/sys/bank-detail/@(o.Id)" title="编辑"><i class="zmdi zmdi-edit f-18 c-bluegray"></i></a>
+                                        <a href="~/sys/bank-delete/@(o.Id)" title="删除" class="m-l-10" onclick="deleteItem(this); return false;"><i class="zmdi zmdi-delete f-18 c-gray"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@section cssOmega{
+
+
+    <style>
+    </style>
+}
+@section js{
+
+
+
+}
+@section jsOmega{
+
+    <script>
+        function deleteItem(obj) {
+            var url = obj.href;
+            console.log(url);
+            return false;
+
+        }
+        $(function () {
+
+        });
+
+    </script>
+}

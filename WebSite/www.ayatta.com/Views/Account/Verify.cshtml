@@ -1,0 +1,95 @@
+@model Model<User>
+<div class="container-wrap">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-9 col-sm-offset-1">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="stepflex ">
+                            <dl class="first done">
+                                <dt class="s-num">1</dt>
+                                <dd class="s-text">确认账号<s></s><b></b></dd>
+                                <dd></dd>
+                            </dl>
+                            <dl class="normal doing">
+                                <dt class="s-num">2</dt>
+                                <dd class="s-text">验证身份<s></s><b></b></dd>
+                            </dl>
+                            <dl class="normal">
+                                <dt class="s-num">3</dt>
+                                <dd class="s-text">设置新密码<s></s><b></b></dd>
+                            </dl>
+                            <dl class="last">
+                                <dt class="s-num">&nbsp;</dt>
+                                <dd class="s-text">完成<s></s><b></b></dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <div class="card-body card-padding">
+                        @using (Html.BeginForm())
+                        {
+                        <div class="form-group fg-line">
+                            <label for="uid" class="control-label">
+                                帐 号
+                            </label>
+                            <input type="text" class="form-control input-sm" id="uid" name="uid" maxlength="30"
+                                   placeholder="用户名/绑定邮箱/绑定手机号" onkeyup="if(this.value.length>0 && $(this).parent().hasClass('has-error')){$(this).parent().removeClass('has-error');}" />
+                            <p class="help-block">
+                                您的帐号可能是您的用户名/绑定邮箱/绑定手机号
+                            </p>
+
+                        </div>
+                        <div class="form-group fg-line">
+                            <label for="captcha">
+                                验证码
+                            </label>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <input type="text" id="captcha" name="captcha" class="form-control"
+                                           maxlength="6" placeholder="请输入手机验证码（2分钟内有效）" />
+                                </div>
+                                <div class="col-sm-4">
+                                    <p class="form-control-static">
+                                        <button id="btn-get-captcha" disabled="disabled" type="button" class="btn btn-default waves-effect" onclick="app.account.getCaptcha(this);">
+                                            获取验证码
+                                        </button>
+                                    </p>
+                                </div>
+                            </div>
+                            <p class="help-block">
+                                请输入图片中的字符，不区分大小写。
+                            </p>
+                        </div>
+                        <div class="form-group">
+                            <p id="notice-msg" class="c-orange"></p>
+                            <button type="button" class="btn bgm-pink btn-lg btn-block waves-effect" onclick="app.passport.signUp(this);">下一步</button>
+
+                        </div>
+
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+@section js{
+
+
+}
+@section jsOmega{
+    <script src="~/js/app.account.js" asp-version="true"></script>
+    <script>
+
+        $(function () {
+
+
+
+        });
+    </script>
+}

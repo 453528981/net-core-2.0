@@ -1,0 +1,119 @@
+﻿@model Model<RBAC.Module, int>
+
+<div class="card">
+    <div class="card-header ch-alt">
+       
+        <h2>@(Model.Data.Id > 0 ? "编辑 模块" : "添加 子模块")</h2>
+        <ul class="actions">
+            @if (Model.Data.Id > 0)
+            {
+                <li>
+                    <a href="javascript:void(0);" title="数据"  onclick="loadFuncList(@(Model.Data.Id));">
+                        <i class="zmdi zmdi-storage"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" title="添加子模块" onclick="loadDetail(0,@(Model.Data.Id));">
+                        <i class="zmdi zmdi-plus c-red"></i>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+    <div class="card-body card-padding">
+        @using (Html.BeginForm())
+        {
+            if (Model.Data.Id > 0)
+            {
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Id">Id</label>
+                        <p class="form-control-static">@(Model.Data.Id)</p>
+                    </div>
+                </div>
+            }
+            if(Model.Extra>0)
+            {
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Pid">父Id</label>
+                        <p class="form-control-static">@(Model.Extra)</p>
+                    </div>
+                </div>
+            }
+
+            <div class="form-group">
+                <div class="fg-line">
+                    <label for="input-Name">名 称</label>
+                    <input id="input-Name" name="Name" type="text" class="form-control" maxlength="20" value="@(Model.Data.Name)" placeholder="名称">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="fg-line">
+                    <label for="input-Icon">图 标</label>
+                    <input id="input-Icon" name="Icon" type="text" class="form-control" maxlength="200" value="@(Model.Data.Icon)" placeholder="图标">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="fg-line">
+                    <label for="input-Link">链 接</label>
+                    <input id="input-Link" name="Link" type="text" class="form-control" maxlength="300" value="@(Model.Data.Link)" placeholder="链接">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="fg-line">
+                    <label for="input-Priority">排 序</label>
+                    <input id="input-Priority" name="Priority" type="text" class="form-control" maxlength="2" value="@(Model.Data.Priority)" placeholder="排序">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="fg-line">
+                    <label for="input-Status">状 态</label>
+                    <select id="input-Status" name="Status" class="form-control">
+                        <option value="True" @(Model.Data.Status ? "selected" : string.Empty)>可用</option>
+                        <option value="False" @(!Model.Data.Status ? "selected" : string.Empty)>不可用</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="button" class="btn btn-primary btn-lg btn-block waves-effect" onclick="submitForm(this);" data-loading-text="提交中...">
+                    提 交
+                </button>
+            </div>
+        }
+    </div>
+
+</div>
+    <script type="text/javascript">
+
+        function submitForm(btn) {
+            var form = btn.form;
+            $(btn).button('loading');
+            var param = $(form).serialize();
+            $.post(form.action, param, function (r) {                
+                if (r.status) {
+                    $(btn).button('reset');
+                    //notify('操作成功', 'success');
+                    /*
+                    if (result.Extra != null && result.Extra != "") {
+                        alert(result.Extra + "不存在");
+                    }
+                    if (result.Data != null) {
+                        setTimeout(function () {
+                            window.location = "/Trial/TrialPlanDetail/" + result.Data;
+                        }, 500);
+                    } else {
+                        window.location.reload();
+                    }
+                    */
+                }
+                else {
+                    $(btn).button('reset');
+                    //notify(result.Message, 'danger');
+                }
+            }, "json");
+            return false;
+        }
+    </script>

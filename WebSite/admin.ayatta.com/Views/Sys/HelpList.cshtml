@@ -1,0 +1,82 @@
+﻿@model HelpListModel
+
+<div class="container">
+    <div class="card">
+        @using (Html.BeginForm())
+        {
+            <div class="card-header ch-alt">
+                <h2>帮助 列表</h2>
+                <ul class="actions">
+                    <li>
+                        <a href="/sys/help-detail/" title="添加">
+                            <i class="zmdi zmdi-plus c-red"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+
+                                <th>Id</th>
+                                <th>父Id</th>
+                                <th>标题</th>
+
+                                <th>排序</th>
+                                <th>状态</th>
+                                <th>创建时间</th>
+                                <th>操 作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var o in Model.Helps)
+                            {
+                                <tr>
+                                    <td>
+                                        @(o.Id)
+                                    </td>
+                                    <td>@(o.Pid)</td>
+                                    <td>
+                                        @(o.Title)
+                                    </td>
+
+                                    <td>@(o.Priority)</td>
+                                    <td>
+                                        @(o.Status)
+                                    </td>
+                                    <td>
+                                        @(o.CreatedOn.ToString("yyyy-MM-dd HH:mm:ss"))
+                                    </td>
+                                    <td>
+                                        @*<a href="~/sys/help-detail/@(o.Id)" title="子列表"><i class="zmdi zmdi-storage f-18 c-bluegray"></i></a>*@
+                                        <a href="~/sys/help-detail/@(o.Id)" title="编辑" class="m-l-10"><i class="zmdi zmdi-edit f-18 c-bluegray"></i></a>
+                                        <a href="~/sys/help-delete/@(o.Id)" title="删除" class="m-l-10" onclick="deleteItem(this); return false;"><i class="zmdi zmdi-delete f-18 c-gray"></i></a>
+
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section jsOmega{
+
+    <script>
+        function deleteItem(obj) {
+            var url = obj.href;
+            console.log(url);
+            return false;
+
+        }
+        $(function () {
+
+        });
+
+    </script>
+}

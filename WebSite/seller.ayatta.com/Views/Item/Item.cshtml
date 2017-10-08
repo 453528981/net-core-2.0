@@ -1,0 +1,382 @@
+@model ItemModel.Item
+
+
+@section css
+{
+    <link href="@(WebSite.Static)/css/summernote.min.css" rel="stylesheet">
+}
+@section cssOmega
+{
+    <style>
+        dl dt {
+            font-weight: normal;
+        }
+
+        .prop-wrap {
+            padding: 10px;
+            background-color: #f8f8f8;
+            border: 1px solid #ececec;
+        }
+
+        .prop-wrap-blue {
+            border: 1px solid #d5e4fa;
+            background-color: #f5f9ff;
+        }
+
+        .table-bordered {
+            border: 1px solid #f0f0f0;
+        }
+
+        .table > tbody > tr > td {
+            vertical-align: middle;
+        }
+
+        .thumbnail {
+            padding: 5px;
+            border-radius: 0;
+        }
+
+            .thumbnail .caption {
+                text-align: center;
+            }
+
+        .a-input-file {
+            display: block;
+            position: relative;
+            font-size: 12px;
+            font-weight: normal;
+            width: 70px;
+            height: 30px;
+            line-height: 30px;
+            overflow: hidden;
+            color: #999999;
+            cursor: pointer;
+            text-align: center;
+        }
+
+            .a-input-file .input-file {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 70px;
+                height: 30px;
+                opacity: 0;
+                cursor: pointer;
+                filter: alpha(opacity=0);
+            }
+    </style>
+}
+<div class="container">
+    <div class="block-header">
+        <h2>Table</h2>
+
+        <ul class="actions">
+            <li>
+                <a href="">
+                    <i class="zmdi zmdi-trending-up"></i>
+                </a>
+            </li>
+            <li>
+                <a href="">
+                    <i class="zmdi zmdi-check-all"></i>
+                </a>
+            </li>
+            <li class="dropdown">
+                <a href="" data-toggle="dropdown">
+                    <i class="zmdi zmdi-more-vert"></i>
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li>
+                        <a href="">Refresh</a>
+                    </li>
+                    <li>
+                        <a href="">Manage Widgets</a>
+                    </li>
+                    <li>
+                        <a href="">Widgets Settings</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h2>Basic Table <small>Basic example without any additional modification classes</small></h2>
+        </div>
+
+        <div id="data-catgs" class="card-body card-padding">
+            @using (Html.BeginForm())
+            {
+                <p class="lead">Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus.</p>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div id="container-prop">
+
+
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div id="container-keyProp">
+
+                        </div>
+                        <dl>
+                            <dt>商品编号</dt>
+                            <dd id="form-for-code">
+                                <div class="fg-line ">
+                                    <input type="text" name="item.code" value="@(Model.Data.Code)" class="form-control" maxlength="8" onkeyup="ayatta.item.codeOnKeyup(this,0);" />
+                                </div>
+                                <p class="help-block">商品编号（20个字符以内）</p>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>商品条形码</dt>
+                            <dd id="form-for-barcode">
+                                <div class="fg-line ">
+                                    <input type="text" name="item.barcode" value="@(Model.Data.Barcode)" class="form-control" maxlength="12" onkeyup="ayatta.item.codeOnKeyup(this,1);" />
+                                </div>
+                                <p class="help-block">商品条形码（20个字符以内）</p>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>商品名称</dt>
+                            <dd id="form-for-name">
+                                <div class="fg-line">
+                                    <input type="text" name="item.name" value="@(Model.Data.Name)" class="form-control" onkeyup="ayatta.item.nameOnKeyup(this);" onblur="ayatta.item.nameOnBlur(this);" />
+                                </div>
+                                <p class="help-block">商品名称（60字节以内,一个中文两字节）<span id="item-name-len"></span></p>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>商品标题</dt>
+                            <dd id="form-for-title">
+                                <div class="fg-line">
+                                    <input type="text" value="@(Model.Data.Title)" name="item.title" class="form-control" onkeyup="ayatta.item.nameOnKeyup(this);" onblur="ayatta.item.nameOnBlur(this);" />
+                                </div>
+                                <p class="help-block">商品标题（为空或30字以内）</p>
+                            </dd>
+                        </dl>
+
+                        <dl>
+                            <dt class="m-b-15">商品规格</dt>
+                            <dd class="prop-wrap">
+                                <div id="container-saleProp">
+
+
+                                </div>
+                                <div id="container-sku">
+
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>商品数量</dt>
+                            <dd id="form-for-stock">
+                                <div class="fg-line">
+                                    <input type="text" name="item.stock" value="@(Model.Data.Stock)" class="form-control" maxlength="8" onkeyup="ayatta.item.stockOnKeyup(this);"
+                                           onblur="ayatta.item.stockOnBlur(this);" />
+                                </div>
+                                <p class="help-block">请如实填写（取值范围：0-99999999）</p>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>市场价格</dt>
+                            <dd id="form-for-price">
+                                <div class="fg-line">
+                                    <input type="text" name="item.retailPrice" value="@(Model.Data.RetailPrice)" class="form-control" maxlength="9" onkeyup="this.value=this.value.replace(/\D/g, '');" />
+                                </div>
+                                <p class="help-block">以元为单位，精确到小数点后两位（取值范围：0-99999999）</p>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>商品价格(PC/WAP)</dt>
+                            <dd id="form-for-price">
+                                <div class="fg-line">
+                                    <input type="text" name="item.price" value="@(Model.Data.Price)" class="form-control" maxlength="9" onkeyup="ayatta.item.priceOnKeyup(this);"
+                                           onblur="ayatta.item.priceOnBlur(this);" />
+                                </div>
+                                <p class="help-block">价格应在销售属性表中所填最高与最低价格范围区间内，以元为单位，精确到小数点后两位（取值范围：0-99999999）</p>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>商品价格(App)</dt>
+                            <dd id="form-for-price">
+                                <div class="fg-line">
+                                    <input type="text" name="item.appPrice" value="@(Model.Data.AppPrice)" class="form-control" maxlength="9" onkeyup="ayatta.item.priceOnKeyup(this);"
+                                           onblur="ayatta.item.appPriceOnBlur(this);" />
+                                </div>
+                                <p class="help-block">价格应在销售属性表中所填最高与最低价格范围区间内，以元为单位，精确到小数点后两位（取值范围：0-99999999）</p>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt class="m-b-15">商品图片</dt>
+                            <dd class="prop-wrap prop-wrap-blue">
+                                <p class="text-muted">800px*800px以上的图片，可以在宝贝详情页提供图片放大功能。</p>
+                                <p class="text-muted">背景图是提供的范例，请尽量参照范例选图，发布后范例不会显示。</p>
+
+                                <div class="row">
+                                    @for (var i = 0; i < 5; i++)
+                                    {
+                                        var img = "http://img.taobaocdn.com/imgextra/T15iCxXoxDXXb1upjX_100x100.jpg";
+                                        if (i < Model.Data.Imgs.Count)
+                                        {
+                                            img = Model.Data.Imgs[i];
+                                        }
+                                        <div class="col-sm-4 col-md-2">
+                                            <div class="thumbnail">
+                                                <img id="item-img-@i" src="@(img)" alt="">
+                                                <div class="caption">
+                                                    <a class="a-input-file" href="javascript:void(0);">
+                                                        <span>选择图片</span>
+                                                        <input type="file" name="image" class="input-file" onchange="ayatta.item.imageUpload(this,@i)" />
+                                                    </a>
+                                                    <input id="item-img-val-@i" type="hidden" name="item.img" value="@(img)">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+
+                                <p class="text-danger">
+                                    图片至少上传1张，图片类型只能为gif,png,jpg,jpeg，且大小不超过1M。
+                                </p>
+                                <p class="text-muted">
+                                    请不要在图片上添加除商品外的其他信息, 诸如水印、商标、优惠信息等。
+                                </p>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt class="m-b-15">商品摘要</dt>
+                            <dd id="form-for-summary">
+                                <div class="fg-line">
+                                    <textarea id="summary" class="form-control" rows="4" name="item.summary">@(Model.Data.Summary)</textarea>
+                                </div>
+                                <p class="help-block">商品摘要（5至200个字）</p>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>商品描述</dt>
+                            <dd class="p-10">
+
+                                <div role="tabpanel">
+                                    <ul class="tab-nav" role="tablist">
+                                        <li class="active"><a href="#item-detail" aria-controls="item-detail" role="tab" data-toggle="tab">商品详情</a></li>
+                                        <li><a href="#item-manual" aria-controls="item-manual" role="tab" data-toggle="tab">使用方法</a></li>
+                                        <li><a href="#item-photo" aria-controls="item-photo" role="tab" data-toggle="tab">产品实拍</a></li>
+                                        <li><a href="#item-story" aria-controls="item-story" role="tab" data-toggle="tab">品牌故事</a></li>
+                                        <li><a href="#item-notice" aria-controls="item-notice" role="tab" data-toggle="tab">使用须知</a></li>
+                                    </ul>
+
+                                    <div class="tab-content">
+                                        <div role="tabpanel" class="tab-pane active" id="item-detail">
+                                            <textarea name="item.desc.detail" class="html-editor">@(Model.ItemDesc.Detail)</textarea>
+                                        </div>
+                                        <div role="tabpanel" class="tab-pane" id="item-manual">
+                                            <textarea name="item.desc.manual" class="html-editor">@(Model.ItemDesc.Manual)</textarea>
+                                        </div>
+                                        <div role="tabpanel" class="tab-pane" id="item-photo">
+                                            <textarea name="item.desc.photo" class="html-editor">@(Model.ItemDesc.Photo)</textarea>
+                                        </div>
+                                        <div role="tabpanel" class="tab-pane" id="item-story">
+                                            <textarea name="item.desc.story" class="html-editor">@(Model.ItemDesc.Story)</textarea>
+                                        </div>
+                                        <div role="tabpanel" class="tab-pane" id="item-notice">
+                                            <textarea name="item.desc.notice" class="html-editor">@(Model.ItemDesc.Notice)</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </dd>
+
+                        </dl>
+                        <dl>
+                            <dt>库存计数</dt>
+                            <dd>
+                                <div class="radio m-b-15">
+                                    <label>
+                                        <input type="radio" name="item.subStock" value="0" checked="checked" />
+                                        <i class="input-helper"></i>
+                                        拍下减库存
+                                    </label>
+                                    <span class="text-danger m-l-10">买家拍下商品即减少库存，存在<a target="blank" href="http://service.taobao.com/support/knowledge-5104445.htm?spm=0.0.0.122.83ee7e">恶拍</a>风险。秒杀、超低价等热销商品，如需避免超卖可选此方式</span>
+
+                                </div>
+                                <div class="radio m-b-15">
+                                    <label>
+                                        <input type="radio" name="item.subStock" value="1" />
+                                        <i class="input-helper"></i>
+                                        付款减库存
+                                    </label>
+                                    <span class="text-danger m-l-10">买家拍下并完成付款方减少库存，存在<a target="blank" href="http://service.taobao.com/support/knowledge-1110945.htm?spm=a220z.1000885.0.103.c88ca1">超卖</a>风险。如需减少恶拍、提高回款效率，可选此方式</span>
+
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>开始时间</dt>
+                            <dd>
+                                <div class="radio m-b-15">
+                                    <label>
+                                        <input type="radio" name="item.online" value="0" checked="checked" />
+                                        <i class="input-helper"></i>
+                                        立刻
+                                    </label>
+                                </div>
+                                <div class="radio m-b-15">
+                                    <label>
+                                        <input type="radio" name="item.online" value="" />
+                                        <i class="input-helper"></i>
+                                        设定
+                                    </label>
+                                </div>
+                                <div class="radio m-b-15">
+                                    <label>
+                                        <input type="radio" name="item.online" value="1" />
+                                        <i class="input-helper"></i>
+                                        放入仓库
+                                    </label>
+                                </div>
+                            </dd>
+                        </dl>
+                        <div>
+                            <button type="button" class="btn btn-primary btn-lg btn-block waves-effect" onclick="ayatta.item.submitForm(this);" data-loading-text="提交中...">
+                                提 交
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<form id='form-upload' action='/common/upload/?iframe=true' method="POST" target='frame-upload' enctype='multipart/form-data'
+      style="display: none;">
+    <iframe id='frame-upload' style='display: none' name='frame-upload' src="about:blank"></iframe>
+</form>
+@section js
+{
+    <script src="@(WebSite.Static)/js/summernote.min.js"></script>
+    <script src="~/js/ayatta.item.js"></script>
+}
+
+@section jsOmega
+{
+    <script>
+    //document.domain = 'ayatta.com';
+    var data=@Html.Raw(Json.Serialize(Model.Data));
+
+    var getChildProp=ayatta.item.getChildProp;
+    ayatta.item.bind(@(Model.CatgId),data);
+
+    </script>
+
+    <script>
+
+    </script>
+}

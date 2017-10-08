@@ -1,0 +1,83 @@
+﻿@model SecurityIndexModel
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h2>
+                安全中心
+                <small>
+                    xxx
+                </small>
+            </h2>
+        </div>
+        <div class="card-body  table-responsive">
+            <table class="table table-striped table-hover">
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td><strong>登录密码</strong></td>
+                        <td>
+                            <span class="c-gary">安全性高的密码可以使账户更安全，建议您定期更改密码以保护账户安全</span>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><strong>绑定手机</strong></td>
+                        <td>
+                            @if (!Model.User.Mobile.IsNullOrEmpty())
+                            {
+                                <p>
+                                    您的绑定手机：<strong>@Model.User.Mobile</strong>
+                                </p>
+                                <p>您可用该手机登录及找回密码。 请勿随意泄露邮箱,轻信他人邮件，以防被不法分子利用，骗取帐号信息。</p>
+                            }
+                            else
+                            {
+                                <p>
+                                    绑定后，可用于快速找回登录密码及支付密码，接收账户余额变动提醒。
+                                </p>
+                            }
+
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><strong>绑定邮箱</strong></td>
+                        <td>
+                            @if (!Model.User.Email.IsNullOrEmpty())
+                            {
+                                <p>
+                                    您的绑定手机：<strong>@Model.User.Email</strong>
+                                </p>
+                            }
+                            else
+                            {
+                                <p>
+                                    绑定后，可用于快速找回登录密码及支付密码，接收账户余额变动提醒。
+                                </p>
+                            }
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><strong>实名认证</strong></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+        </div>
+
+    </div>
+</div>
+
+@section js{
+    <script type="text/javascript">
+
+
+    </script>
+}

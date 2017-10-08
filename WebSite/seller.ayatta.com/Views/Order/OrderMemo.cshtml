@@ -1,0 +1,98 @@
+﻿@model Magic<byte, string, string>
+
+<div>
+    @using (Html.BeginForm())
+    {
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                &times;
+            </button>
+            <h4 class="modal-title">
+                备 忘
+            </h4>
+        </div>
+        <div class="modal-body">
+            @if (Model != null)
+                {
+                <div>
+                    <p>
+                        <label class="radio radio-inline m-r-20">
+                            <input type="radio" name="flag" @(Model.First == 1 ? "checked='checked'" : string.Empty) value="1">
+                            <i class="input-helper "></i>
+                            <i class="zmdi zmdi-flag c-red f-18"></i>
+                        </label>
+                        <label class="radio radio-inline m-r-20">
+                            <input type="radio" name="flag" @(Model.First == 2 ? "checked='checked'" : string.Empty) value="2">
+                            <i class="input-helper "></i>
+                            <i class="zmdi zmdi-flag c-orange f-18"></i>
+                        </label>
+                        <label class="radio radio-inline m-r-20">
+                            <input type="radio" name="flag" @(Model.First == 3 ? "checked='checked'" : string.Empty) value="3">
+                            <i class="input-helper "></i>
+                            <i class="zmdi zmdi-flag c-green f-18"></i>
+                        </label>
+                        <label class="radio radio-inline m-r-20">
+                            <input type="radio" name="flag" @(Model.First == 4 ? "checked='checked'" : string.Empty) value="4">
+                            <i class="input-helper "></i>
+                            <i class="zmdi zmdi-flag c-blue f-18"></i>
+                        </label>
+                        <label class="radio radio-inline m-r-20">
+                            <input type="radio" name="flag" @(Model.First == 5 ? "checked='checked'" : string.Empty) value="5">
+                            <i class="input-helper "></i>
+                            <i class="zmdi zmdi-flag c-purple f-18"></i>
+                        </label>
+                    </p>
+
+                    <p>
+                        备 忘<textarea name="memo" cols="50" rows="3" maxlength="100" class="form-control">@(Model.Second)</textarea>
+                    </p>
+                    <p class="help-block">
+                        备忘信息作为你对这笔订单的备忘记录，仅自己可见。请勿备注个人敏感信息。<span class="color-red">（小于100字）</span>
+                    </p>
+                </div>
+            }
+            else
+            {
+                <div>
+                    <div class="status-box status-box-warm-error">
+                        <div class="status-icon">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <i class="icon-remove-sign icon-3x"></i>
+                                </div>
+                                <div class="col-md-10">
+                                    <strong>登录超时或订单不存在！</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+            <div class="modal-footer">
+                <p id="message" class="pull-left">
+                </p>
+
+                @if (Model != null)
+                {
+                    <button type="button" class="btn btn-primary" onclick="submitMemo(this.form)">
+                        确 认
+                    </button>
+                }
+            </div>
+    }
+</div>
+
+<script type="text/javascript">
+    function submitMemo(form) {
+        var param = $(form).serialize();
+        $.postJSON(form.action, param, function (result) {
+            if (result.status == false) {
+                $('#message', form).css('color', 'red').html(result.Message);
+            }
+            else {
+                $('#message', form).css('color', 'green').html("备忘已成功保存！");
+            }
+        });
+    }
+</script>

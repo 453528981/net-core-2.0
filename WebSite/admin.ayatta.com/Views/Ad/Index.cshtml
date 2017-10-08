@@ -1,0 +1,62 @@
+﻿@section cssOmega{
+    <link href="@(WebSite.Static)/css/bootstrap-treeview.min.css" rel="stylesheet">
+
+    <style>
+        .table > tbody > tr > td {
+            vertical-align: middle
+        }
+
+        .form-input-sm {
+            padding: 4px 8px;
+        }
+    </style>
+}
+@section js{
+
+    <script src="@(WebSite.Static)/js/bootstrap-treeview.min.js"></script>
+
+} 
+
+@section jsOmega{
+
+    <script>
+        $(function () {
+            $.getJSON('/ad/hierarchy/', function (data) {
+
+                $('#hierarchy-tree').treeview({
+                    data: data,
+                    onNodeSelected: function (event, node) {
+                        console.log(node);
+                        $("#hierarchy-item").load("/ad/module-detail/" + node.id);
+
+                    }
+                });
+            });
+        });
+
+        function loadDetail(id, parentId) {
+            if (parentId) {
+                $("#hierarchy-item").load("/ad/module-detail/0?pid=" + parentId);
+            } else {
+                $("#hierarchy-item").load("/ad/module-detail/" + id);
+
+            }
+        }
+
+    </script>
+}
+
+<div class="container">
+    <div class="block-header">
+        <h2>类目</h2>
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-sm-4">
+            <div id="hierarchy-tree"></div>
+        </div>
+        <div class="col-md-9 col-sm-8">
+            <div id="hierarchy-item">
+            </div>
+        </div>
+    </div>
+</div>

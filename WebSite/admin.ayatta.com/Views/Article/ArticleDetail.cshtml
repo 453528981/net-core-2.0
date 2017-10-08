@@ -1,0 +1,190 @@
+﻿@model ArticleDetailModel
+
+<div class="container">
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>@(Model.Article.Id == 0 ? "添加" : "编辑") 文章</h2>
+        </div>
+        <div class="card-body card-padding">
+            @using (Html.BeginForm())
+            {
+
+                @if (Model.Article.Id > 0)
+                {
+                    <div class="form-group">
+                        <div class="fg-line">
+                            <label for="input-Id">Id</label>
+                            <p class="form-control-static">@(Model.Article.Id)</p>
+                        </div>
+                    </div>
+                }
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Name">名称</label>
+                        <input id="input-Name" name="Name" type="text" class="form-control" maxlength="50" value="@(Model.Article.Name)" placeholder="名称">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Title">标题</label>
+                        <input id="input-Title" name="Title" type="text" class="form-control" maxlength="50" value="@(Model.Article.Title)" placeholder="标题">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Label">标签</label>
+                        <input id="input-Label" name="Label" type="text" class="form-control" maxlength="100" value="@(Model.Article.Label)" placeholder="标签">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Keyword">关键字</label>
+                        <input id="input-Keyword" name="Keyword" type="text" class="form-control" maxlength="100" value="@(Model.Article.Keyword)" placeholder="关键字">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Source">来源</label>
+                        <input id="input-Source" name="Source" type="text" class="form-control" maxlength="50" value="@(Model.Article.Source)" placeholder="来源">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Author">作者</label>
+                        <input id="input-Author" name="Author" type="text" class="form-control" maxlength="50" value="@(Model.Article.Author)" placeholder="作者">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Link">链接</label>
+                        <input id="input-Link" name="Link" type="text" class="form-control" maxlength="300" value="@(Model.Article.Link)" placeholder="链接">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Icon">图标</label>
+                        <input id="input-Icon" name="Icon" type="text" class="form-control" maxlength="300" value="@(Model.Article.Icon)" placeholder="图标">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Picture">图片</label>
+                        <input id="input-Picture" name="Picture" type="url" class="form-control" maxlength="300" value="@(Model.Article.Picture)" placeholder="图片">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-StartedOn">开始时间</label>
+                        <input id="input-StartedOn" name="StartedOn" type="url" class="form-control date-time-picker" maxlength="18" value="@(Model.Article.StartedOn.ToString("yyyy-MM-dd HH:mm:ss"))" placeholder="开始时间">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-StoppedOn">结束时间</label>
+                        <input id="input-StoppedOn" name="StoppedOn" type="url" class="form-control date-time-picker" maxlength="18" value="@(Model.Article.StoppedOn.ToString("yyyy-MM-dd HH:mm:ss"))" placeholder="结束时间">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Summary">摘要</label>
+                        <input id="input-Summary" name="Summary" type="text" class="form-control" maxlength="300" value="@(Model.Article.Summary)" placeholder="摘要">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Content">内容</label>
+                        <textarea name="Content" class="summernote">@(Model.Article.Content)</textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Priority">排序</label>
+                        <input id="input-Priority" name="Priority" type="text" class="form-control" maxlength="300" value="@(Model.Article.Priority)" placeholder="排序">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Badge">标记</label>
+                        <input id="input-Badge" name="Badge" type="text" class="form-control" maxlength="20" value="@(Model.Article.Badge)" placeholder="标记">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Extra">备注</label>
+                        <input id="input-Extra" name="Extra" type="text" class="form-control" maxlength="300" value="@(Model.Article.Extra)" placeholder="备注">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Status">状态</label>
+                        <select id="input-Status" name="Status" class="form-control">
+                            <option value="0" @(Model.Article.Status == 0 ? "selected" : string.Empty)>可用</option>
+                            <option value="1" @(Model.Article.Status == 1 ? "selected" : string.Empty)>不可用</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary btn-lg btn-block waves-effect" onclick="submitForm(this);" data-loading-text="提交中...">
+                        提 交
+                    </button>
+
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@section cssOmega{
+    <link href="@(WebSite.Static)/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+
+    <link href="@(WebSite.Static)/css/summernote.min.css" rel="stylesheet">
+}
+
+@section js{
+    <script src="@(WebSite.Static)/js/moment.min.js"></script>
+    <script src="@(WebSite.Static)/js/bootstrap-datetimepicker.min.js"></script>
+
+    <script src="@(WebSite.Static)/js/summernote.min.js"></script>
+
+}
+@section jsOmega{
+
+
+    <script type="text/javascript">
+        function submitForm(btn) {
+            var form = btn.form;
+            $(btn).button('loading');
+            var param = $(form).serialize();
+            $.post(form.action, param, function (r) {
+                if (r.status) {
+                    $(btn).button('reset');
+                    //notify('操作成功', 'success');
+                    /*
+                    if (result.Extra != null && result.Extra != "") {
+                        alert(result.Extra + "不存在");
+                    }
+                    if (result.Data != null) {
+                        setTimeout(function () {
+                            window.location = "/Trial/TrialPlanDetail/" + result.Data;
+                        }, 500);
+                    } else {
+                        window.location.reload();
+                    }
+                    */
+                }
+                else {
+                    $(btn).button('reset');
+                    //notify(result.Message, 'danger');
+                }
+            }, "json");
+            return false;
+        }
+
+
+        $(document).ready(function () {
+            $('.summernote').summernote();
+            $('.date-time-picker').datetimepicker({ format: 'YYYY-MM-DD HH:mm:ss' });
+
+        });
+    </script>
+}

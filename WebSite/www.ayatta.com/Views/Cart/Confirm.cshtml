@@ -1,0 +1,195 @@
+﻿@model CartModel.Confirm
+
+<div class="container">
+    
+    <form action="~/cart/submit" method="post">
+        <div class="card">
+            <div class="card-header">
+                <h2>购物车<small>确认</small></h2>
+            </div>
+            <div class="card-body card-padding">
+                <div class="row">
+                @foreach (var o in Model.Addresses)
+                {
+                    <div class="col-sm-4">
+                        <div class="card">
+                            <div onclick="selectAddress(@o.Id,@Model.AddressId);" class="card-body card-padding @(Model.AddressId == o.Id ? "bgm-pink c-white":string.Empty)">
+                                <p>@(o.Province) @(o.City) @(o.Consignee) 收）</p>
+                                <p>@(o.Street)</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+                </div>
+            </div>
+            <div class="card-body card-padding">
+
+
+            </div>
+            <div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="cell-item">商品信息</th>
+                                <th>商品属性</th>
+                                <th class="text-center">单价（元）</th>
+                                <th class="text-center">数 量</th>
+                                <th class="text-center">优惠方式</th>
+                                <th class="text-center">小 计</th>
+                            </tr>
+                        </thead>
+                        @foreach (var basket in Model.CartData.Baskets.Where(x => x.HasSelected))
+                        {
+                        <tbody class="">
+                            <tr class="shop-header">
+                                <td colspan="4">
+                                    <strong class="c-pink">祥织男装专营店</strong>
+                                    <span>
+                                        <span class="m-l-10 c-purple">全场满68元包邮</span>
+                                        <span class="m-l-10 c-red">已享优惠:包邮</span>
+                                    </span>
+                                </td>
+
+                                <td colspan="2" class="text-right"></td>
+                            </tr>
+                            @foreach (var o in basket.Skus.Where(x => x.Selected))
+                            {
+                                var cls = string.Empty;
+                                if (o.Status != 0)
+                                {
+                                    cls = "item-invalid";
+                                }
+                                if (o.Selected)
+                                {
+                                    cls = "item-selected";
+                                }
+                                <tr class="@(cls)">
+                                    <td>
+                                        <div class="media">
+                                            <div class="pull-left">
+                                                <a href="#">
+                                                    <img class="media-object" src="@(o.Picture)" style="width:80px;height:80px;" alt="@(o.Name)">
+                                                </a>
+                                            </div>
+                                            <div class="media-body">
+                                                <h4 class="media-heading">@(o.Name)</h4>
+                                            </div>
+                                            <div>asf</div>
+                                        </div>
+
+                                    </td>
+                                    <td class="c-gray">
+                                        @foreach (var x in o.PropTexts)
+                                        {
+                                        <span>@(x)</span><br />
+                                        }
+
+                                    </td>
+                                    <td class="text-center">
+                                        @(o.Price.ToString("F2"))
+                                    </td>
+                                    <td class="text-center">
+                                        @(o.Quantity)
+                                    </td>
+                                    <td class="text-center"></td>
+                                    <td class="text-center">
+                                        <strong class="c-deeporange">@((o.Price * o.Quantity).ToString("F2"))</strong>
+                                    </td>
+                                </tr>
+                            }
+                            @foreach (var o in basket.Items.Where(x => x.Selected))
+                            {
+                                var cls = string.Empty;
+                                if (o.Status != 0)
+                                {
+                                    cls = "item-invalid";
+                                }
+                                if (o.Selected)
+                                {
+                                    cls = "item-selected";
+                                }
+                                <tr class="@(cls)">
+                                    <td>
+                                        <div class="media">
+                                            <div class="pull-left">
+                                                <a href="#">
+                                                    <img class="media-object" src="@(o.Picture)" style="width:80px;height:80px;" alt="@(o.Name)">
+                                                </a>
+                                            </div>
+                                            <div class="media-body">
+                                                <h4 class="media-heading">@(o.Name)</h4>
+                                            </div>
+                                            <div>asf</div>
+                                        </div>
+
+                                    </td>
+                                    <td class="c-gray">
+                                        
+
+                                    </td>
+                                    <td class="text-center">
+                                        @(o.Price.ToString("F2"))
+                                    </td>
+                                    <td class="text-center">
+                                        @(o.Quantity)
+                                    </td>
+                                    <td class="text-center"></td>
+                                    <td class="text-center">
+                                        <strong class="c-deeporange">@((o.Price * o.Quantity).ToString("F2"))</strong>
+                                    </td>
+                                </tr>
+                            }
+                            <tr class="shop-footer">
+                                <td colspan="2">
+                                    <p>给卖家留言：</p>
+                                    <p><textarea></textarea></p>
+                                </td>
+                                <td colspan="2"></td>
+                                <td colspan="2" class="text-center">
+                                    店铺合计(含运费)<strong class="c-deeporange">￥@(basket.SubTotal.ToString("F2"))</strong>
+                                </td>
+                            </tr>
+                        </tbody>
+                    }
+
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+        <button type="submit">提交</button>
+    </form>
+
+</div>
+
+@section cssOmega{
+
+}
+@section js{
+
+
+}
+@section jsOmega{
+    <script>
+        function selectAddress(userAddressId, defaultUserAddressId) {
+            if (userAddressId != defaultUserAddressId) {
+                var url = "/cart/confirm";
+                $.post(url, { userAddressId: userAddressId }, function (r) {
+                    if (r != "200" && r != "300" && r != "500") {
+                        $("#content").html(r);
+                    }
+                });
+            }
+        }
+
+        function submitForm(btn) {
+            var form = btn.form;
+            $.post(form.action, function (r) {
+                console.log(r);
+            });
+
+        }
+    </script>
+}

@@ -1,0 +1,223 @@
+﻿@model OrderDetailModel
+<div class="container">
+    <div class="block-header">
+        <h2>Table</h2>
+
+        <ul class="actions">
+            <li>
+                <a href="">
+                    <i class="zmdi zmdi-trending-up"></i>
+                </a>
+            </li>
+            <li>
+                <a href="">
+                    <i class="zmdi zmdi-check-all"></i>
+                </a>
+            </li>
+            <li class="dropdown">
+                <a href="" data-toggle="dropdown">
+                    <i class="zmdi zmdi-more-vert"></i>
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li>
+                        <a href="">Refresh</a>
+                    </li>
+                    <li>
+                        <a href="">Manage Widgets</a>
+                    </li>
+                    <li>
+                        <a href="">Widgets Settings</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+    </div>
+    @if (Model.Order.Status == OrderStatus.SellerSendPart || Model.Order.Status == OrderStatus.WaitBuyerConfirm)
+    {
+        <div class="card">
+            <div class="card-body card-padding">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="media">
+                            <div class="pull-left">
+                                <a href="#">
+                                    <img class="media-object" src="img/demo/profile-pics/1.jpg" alt="">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <p>送货方式：普通快递</p>
+                                <p>承运人：韵达快递</p>
+                                <p>承运人电话：95546</p>
+                                <p>货运单号：3946913781440</p>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8"></div>
+                </div>
+            </div>
+        </div>
+    }
+    <div class="card">
+        <div class="card-body card-padding">
+            <div class="row">
+                <div class="col-md-3">
+                    <p class="m-b-5 f-13">收货人信息</p>
+                    <dl class="dl-horizontal dl-custom">
+                        <dt>收货人：</dt>
+                        <dd>XYZ</dd>
+                        <dt>收货地址：</dt>
+                        <dd>北京丰台区四环到五环之间小屯路 兆丰馨园东区7号楼2单元1302室</dd>
+                        <dt>手机号码：</dt>
+                        <dd>137****4243</dd>
+                    </dl>
+                </div>
+                <div class="col-md-3">
+                    <p class="m-b-5 f-13">配送信息</p>
+                    <dl class="dl-horizontal dl-custom">
+                        <dt>配送方式：</dt>
+                        <dd>普通快递</dd>
+                        <dt>运费：</dt>
+                        <dd>¥0.00</dd>
+
+                    </dl>
+                </div>
+                <div class="col-md-3">
+                    <p class="m-b-5 f-13">付款信息</p>
+                    <dl class="dl-horizontal dl-custom">
+                        <dt>付款方式：</dt>
+                        <dd>在线支付</dd>
+                        <dt>付款时间：</dt>
+                        <dd>2017-03-20 19:41:59</dd>
+                        <dt>应付总额：</dt>
+                        <dd>@(Model.Order.Total.ToString("F2"))</dd>
+                        <dt>商品总额：</dt>
+                        <dd>@(Model.Order.SubTotal.ToString("F2"))</dd>
+                        <dt>运费金额：</dt>
+                        <dd>@(Model.Order.Freight.ToString("F2"))</dd>
+                        <dt>优惠金额：</dt>
+                        <dd>@(Model.Order.Discount.ToString("F2"))</dd>
+                        <dt>优惠券：</dt>
+                        <dd>@(Model.Order.CouponUse.ToString("F2"))</dd>
+                    </dl>
+
+                </div>
+                <div class="col-md-3">
+                    <p class="m-b-5 f-13">发票信息</p>
+                    <dl class="dl-horizontal dl-custom">
+                        <dt>发票类型：</dt>
+                        <dd>普通发票</dd>
+                        <dt>发票抬头：</dt>
+                        <dd>信息科技股份有限公司</dd>
+                        <dt>发票内容：</dt>
+                        <dd>办公用品</dd>
+                    </dl>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <p class="m-b-0">Basic Table</p>
+        </div>
+        <div class="card-body table-responsive">
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            商品信息
+                        </th>
+                        <th>
+                            单 价
+                        </th>
+                        <th>
+                            数 量
+                        </th>
+                        <th>
+                            赠积分
+                        </th>
+                        <th>
+                            <span>
+                                操 作
+                            </span>
+                            @if (!Model.Order.SellerMemo.IsNullOrEmpty())
+                            {
+                                <a class="pull-right" data-trigger="hover" data-toggle="popover" data-placement="left" data-content="@(Model.Order.SellerMemo)" data-original-title="备 注" href="javascript:void(0);"><i class="zmdi zmdi-flag"></i></a>
+
+                            }
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody class="@(Model.Order.Status == OrderStatus.WaitBuyerPay ? "item-pending" : "item")">
+
+                    @for (var i = 0; i < Model.Order.Items.Count; i++)
+                    {
+                        var item = Model.Order.Items[i];
+                        <tr>
+                            <td title="@(item.Name)">
+                                <div class="media">
+                                    <a class="pull-left" href="@(string.Format("{0}/{1}.html", WebSite.Item, item.Id))" target="_blank">
+                                        <img class="media-object" src="http://asset.ayatta.com/7/1e07b4c75221.jpg?width=64&height=64" alt="@(item.Name)" />
+
+                                    </a>
+                                    <div class="media-body">
+                                        <p class="media-heading f-12">
+                                            @(item.Name)
+                                        </p>
+                                        <div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                ¥@(item.Price.ToString("N"))
+                            </td>
+                            <td>
+                                @(item.Quantity)
+                            </td>
+                            <td></td>
+
+                            <td>
+                                <p class="f-12">
+                                    <a>申请售后</a>
+                                    <br />
+                                    <a>评价</a>｜<a>晒单</a>
+                                    <br />
+                                    <a>立即购买</a>
+                                </p>
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+        </div>
+        <div class="card-body card-padding">
+            @if (!Model.Order.BuyerMessage.IsNullOrEmpty())
+            {
+                <p>买家留言： @(Model.Order.BuyerMessage)</p>
+            }
+            
+
+            <p class="text-right m-b-10">商品总额：<span style="width:80px;display:inline-block;">¥@(Model.Order.SubTotal.ToString("F2"))</span></p>
+            <p class="text-right m-b-10">运费：<span style="width:80px;display:inline-block;">¥@(Model.Order.Freight.ToString("F2"))</span></p>
+            <p class="text-right m-b-10">优惠：<span style="width:80px;display:inline-block;">- ¥@(Model.Order.Discount.ToString("F2"))</span></p>
+            <p class="text-right m-b-10 c-red">应付总额：<span style="width:80px;display:inline-block;"><strong>¥@(Model.Order.Total.ToString("F2"))</strong></span></p>
+        </div>
+
+    </div>
+</div>
+
+@section cssOmega{
+    <style>
+       
+    </style>
+}

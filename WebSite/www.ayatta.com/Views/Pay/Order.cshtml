@@ -1,0 +1,129 @@
+﻿@model PayOrder
+<div class="container">
+
+    <div class="card-header">
+        <h2>收银台 <small>Basic example without any additional modification classes</small></h2>
+    </div>
+    <div class="card">
+        <div class="card-body card-padding">
+            <div role="tabpanel">
+                <ul class="tab-nav" role="tablist" data-tab-color="red">
+                    <li class="active"><a href="#platform" aria-controls="platform" role="tab" data-toggle="tab" aria-expanded="true">支付平台</a></li>
+                    <li class="">
+                        <a href="#other" aria-controls="other" role="tab" data-toggle="tab" aria-expanded="false">Profile</a>
+                    </li>
+
+                </ul>
+
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="platform">
+                        @using (Html.BeginForm())
+                        {
+                            <ul class="list-inline">
+                                @foreach (var p in Model.Platforms)
+                                {
+                                    <li>
+                                        <label class="radio radio-inline m-r-20">
+                                            <input type="radio" name="platformId" value="@(p.Id)">
+                                            <i class="input-helper"></i>
+                                            @(p.Name)
+                                        </label>
+                                    </li>
+                                }
+
+                            </ul>
+                            <div>
+                                <button type="submit" class="btn btn-danger btn-lg " data-loading-text="订单支付中...">
+                                    确认支付
+                                </button>
+                            </div>
+                        }                  
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="other">
+                        <p>
+                            Morbi mattis ullamcorper velit. Etiam rhoncus. Phasellus leo dolor, tempus
+                            non, auctor et, hendrerit quis, nisi. Cras id dui. Curabitur turpis.
+                            Etiam ut purus mattis mauris sodales aliquam. Aenean viverra rhoncus pede.
+                            Nulla sit amet est. Donec mi odio, faucibus at, scelerisque quis, convallis
+                            in, nisi. Praesent ac sem eget est egestas volutpat.
+                            Cras varius. Morbi mollis tellus ac sapien. In enim justo, rhoncus ut,
+                            imperdiet a, venenatis vitae, justo. Nam ipsum risus, rutrum vitae,
+                            vestibulum eu, molestie vel, lacus. Fusce vel dui.
+                        </p>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+<div id="dialog-payment" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-label"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="modal-label">
+                    登录到网上银行支付
+                </h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    请在新开网银页面完成付款
+                </p>
+                <p>
+                    付款完成前请不要关闭此窗口。完成付款后请根据你的情况点击下面的按钮：
+                </p>
+                <p>
+                    <span>付款成功</span> <a href="/recharge">查看订单状态 </a>
+                </p>
+                <p>
+                    <span>付款失败</span> <a href="/">支付失败 </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+@section js{
+    <script type="text/javascript">
+        function payConfirm(obj) {
+            var password = document.getElementById('password');
+            if (password != "") {
+                return true;
+            }
+            else {
+                alert(0);
+                return false;
+            }
+
+        }
+
+        function payByEBank(form) {
+            var status = true;
+            if (status == true) {
+                $('#btn-pay-by-ebank').button('loading');
+                $('#dialog-payment').modal({ keyboard: false, backdrop: 'static', show: true });
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        $(function () {
+            $('select').select2();
+        });
+    </script>
+}

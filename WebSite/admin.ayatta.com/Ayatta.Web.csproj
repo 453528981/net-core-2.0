@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot/index.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="Properties\" />
+    <Folder Include="Views\Shared\Components\" />
+    <Folder Include="wwwroot\" />
+    <Folder Include="wwwroot\js\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+    <!--<PackageReference Include="Microsoft.AspNetCore" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.ViewCompilation" Version="2.0.0" PrivateAssets="All" />-->
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\Module\Ayatta.Cart\Ayatta.Cart.csproj" />
+    <ProjectReference Include="..\..\Module\Ayatta.Domain\Ayatta.Domain.csproj" />
+    <ProjectReference Include="..\..\Module\Ayatta.OAuth\Ayatta.OAuth.csproj" />
+    <ProjectReference Include="..\..\Module\Ayatta.OnlinePay\Ayatta.OnlinePay.csproj" />
+    <ProjectReference Include="..\..\Module\Ayatta.Sms\Ayatta.Sms.csproj" />
+    <ProjectReference Include="..\..\Module\Ayatta.Storage\Ayatta.Storage.csproj" />
+    <ProjectReference Include="..\..\Module\Ayatta.Weed\Ayatta.Weed.csproj" />
+    <ProjectReference Include="..\..\Module\Ayatta\Ayatta.csproj" />
+  </ItemGroup>
+  
+  <Import Project="..\Shared\Ayatta.Web.projitems" Label="Shared" />
+ 
+</Project>

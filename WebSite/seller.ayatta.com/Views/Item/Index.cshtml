@@ -1,0 +1,317 @@
+@model ItemModel.Index
+<div class="container">
+    <div class="block-header">
+        <h2>Table</h2>
+
+        <ul class="actions">
+            <li>
+                <a href="">
+                    <i class="zmdi zmdi-trending-up"></i>
+                </a>
+            </li>
+            <li>
+                <a href="">
+                    <i class="zmdi zmdi-check-all"></i>
+                </a>
+            </li>
+            <li class="dropdown">
+                <a href="" data-toggle="dropdown">
+                    <i class="zmdi zmdi-more-vert"></i>
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li>
+                        <a href="">Refresh</a>
+                    </li>
+                    <li>
+                        <a href="">Manage Widgets</a>
+                    </li>
+                    <li>
+                        <a href="">Widgets Settings</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+    </div>
+
+    <div class="card">
+        <form action="?" method="get">
+            <div class="card-header">
+                <h2>Basic Table <small>Basic example without any additional modification classes</small></h2>
+            </div>
+            <div class="card-body card-padding">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="fg-line form-group">
+                            <input type="text" name="keyword" value="@(Model.Param.Keyword)" class="form-control input-sm" placeholder="商品Id/名称">
+                        </div>
+                    </div>
+                    <div class="col-xs-3">
+                        <div class="fg-line form-group">
+                            <input type="text" name="code" value="@(Model.Param.Code)" class="form-control input-sm" placeholder="商家编号">
+                        </div>
+                    </div>
+                    <div class="col-xs-3">
+                        <div class="fg-line form-group">
+                            <input type="text" name="cRId" value='@(Model.Param.CRId>0?Model.Param.CRId.ToString():"")' class="form-control input-sm"
+                                   placeholder="一级类目">
+                        </div>
+                    </div>
+
+                    <div class="col-xs-2">
+                        <div class="fg-line form-group">
+                            <input type="text" name="priceFrom" value='@(Model.Param.PriceFrom>0?Model.Param.PriceFrom.ToString():"")' class="form-control input-sm"
+                                   placeholder="价格>=" onkeyup="this.value=this.value.replace(/\D/g, '');" />
+                        </div>
+                    </div>
+                    <div class="col-xs-2">
+                        <div class="fg-line form-group">
+                            <input type="text" name="priceEnd" value='@(Model.Param.PriceEnd>0?Model.Param.PriceEnd.ToString():"")' class="form-control input-sm"
+                                   placeholder="价格<=" onkeyup="this.value=this.value.replace(/\D/g, '');" />
+                        </div>
+                    </div>
+                    <div class="col-xs-2">
+                        <div class="fg-line form-group">
+                            <input type="text" name="saleFrom" value='@(Model.Param.SaleFrom>0?Model.Param.SaleFrom.ToString():"")' class="form-control input-sm"
+                                   placeholder="销量>=" onkeyup="this.value=this.value.replace(/\D/g, '');" />
+                        </div>
+                    </div>
+                    <div class="col-xs-2">
+                        <div class="fg-line form-group">
+                            <input type="text" name="saleEnd" value='@(Model.Param.SaleEnd>0?Model.Param.SaleEnd.ToString():"")' class="form-control input-sm"
+                                   placeholder="销量<=" onkeyup="this.value=this.value.replace(/\D/g, '');" />
+                        </div>
+                    </div>
+                    <div class="col-xs-2">
+                        <div class="fg-line form-group">
+                            <input type="text" name="status" class="form-control input-sm" placeholder="状态">
+                        </div>
+                    </div>
+                    <div class="col-xs-1">
+                        <div class="fg-line form-group">
+                            <button type="reset" class="btn btn-default waves-effect">重 置</button>
+                        </div>
+                    </div>
+                    <div class="col-xs-1">
+                        <div class="fg-line form-group">
+                            <button type="submit" class="btn bgm-cyan waves-effect">查 找</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body table-responsive">
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                <label class="checkbox checkbox-inline">
+                                    <input type="checkbox">
+                                    <i class="input-helper"></i>
+                                </label>
+                            </th>
+                            <th>
+                                编 号
+                            </th>
+                            <th>
+                                名 称
+                            </th>
+                            <th>
+                                销售价(元)
+                            </th>
+                            <th>
+                                市场价(元)
+                            </th>
+                            <th>
+                                库 存
+                            </th>
+                            <th>
+                                收 藏
+                            </th>
+                            <th>
+                                咨 询
+                            </th>
+                            <th>
+                                评 论
+                            </th>
+                            <th>
+                                总销量
+                            </th>
+                            <th>
+                                状 态
+                            </th>
+                            <th>
+                                上架时间
+                            </th>
+                            <th>
+                                操 作
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>
+                                    <label class="checkbox checkbox-inline">
+                                        <input type="checkbox" value="@(item.Id)">
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </td>
+                                <td>
+                                    @item.Code
+                                </td>
+                                <td title="@(item.Name)">
+                                    @*<a title="编辑" href="/item/mini/@(item.Id)" class="edit" data-toggle="modal" data-target="#modal">
+                                            @(item.Name)
+                                        </a>*@
+                                    <a data-trigger="modal" href="/item/mini/@(item.Id)" data-title="@(item.Name)">@(item.Name)</a>
+                                </td>
+                                <td>
+                                    <span id="item-price-@(item.Id)">@(item.Price.ToString("N"))</span>
+                                </td>
+                                <td>
+                                    <span id="item-retailprice-@(item.Id)">@(item.RetailPrice.ToString("N"))</span>
+                                </td>
+                                <td>
+                                    <span id="item-quantity-@(item.Id)">@item.Stock</span>
+                                </td>
+                                <td>
+                                    @item.CollectCount
+                                </td>
+                                <td>
+                                    @item.ConsultCount
+                                </td>
+                                <td>
+                                    @item.CommentCount
+                                </td>
+                                <td>
+                                    @item.SaleCount
+                                </td>
+                                <td>
+                                    @item.Status
+                                </td>
+                                <td>
+                                    <span>@(item.OnlineOn.ToString("yyyy-MM-dd HH:mm:ss"))</span>
+
+                                </td>
+                                <td>
+                                    <a title="编辑" href="~/item/@(item.Id)">编 辑</a>
+                                    @*<a title="生成拍品" href="/auction/create/@(item.Id)" class="list-item-extra-action" target="_blank">
+                                        <i class="fa fa-gavel"></i>&nbsp;生成拍品
+                                    </a><br />*@
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </form>
+    </div>
+</div>
+<div><a data-trigger="modal" href="/weed" >weed</a></div>
+@section content{
+    <div id="modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-label"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+}
+@section js{
+    <script src="~/js/dialog.js"></script>
+    <script>
+        +function ($) {
+            var d = "";
+
+
+
+         }(jQuery);
+
+        //$(function () {
+
+        //    $('[data-rel="popover"]').popover();
+        //    $('#modal').on('hidden.bs.modal', function (e) {
+
+        //        $('.modal-content').empty();
+        //        $('#modal').removeData('bs.modal');
+        //    });
+        //    //$("#dynamic-placeholder").load('/imgs');
+        //});
+        $.package('ayatta.filer', function () {
+            var latest = [];//最新的
+            var selected = {};//选中的
+            //var data = [];
+            var modal = $('<div class="modal fade in"><div class="modal-dialog"><div class="modal-content"/></div></div>');
+            this.open = function (options) {
+                options = options || { remote: '/weed' };
+                //modal.find('.modal-content').load(options.remote, function () {
+                //    modal.appendTo(options.appendTo || document.body).show();
+                //});
+                $.getJSON(options.remote, function (data) {
+                    modal.find('.modal-content').html(buildHtml(data));
+                    modal.appendTo(options.appendTo || document.body).show();
+                });
+            }
+
+            this.dir = function (dir) {
+                $.getJSON('/weed', { dir: dir }, function (data) {
+                    modal.find('.modal-content').html(buildHtml(data));
+                });
+            }
+
+            this.load = function (dir, last) {
+
+            }
+
+            this.onItemClick = function (obj, key, value) {
+                if ($(obj).hasClass()) {
+                    delete selected[key];
+                    $(obj).removeClass('selected');
+                } else {
+                    selected[key] = value;
+                    $(obj).addClass('selected');
+                }
+            }
+
+
+            this.itemUpload = function () {
+
+            }
+            this.close = function () {
+                modal.remove();
+            }
+
+            function buildHtml(data) {
+                var html = [];
+                var crumb = '';
+                if (data.Directories) {
+                    var array = [];
+                    var len = data.Directories.length;
+                    for (var i = 0; i < len; i++) {
+                        var o = data.Directories[i];
+                        array.push('<li onclick=ayatta.filer.dir("' + o.Name + '")>' + o.Name + '</li>');
+                    }
+                    html = html.concat(array)
+                }
+                if (data.Files) {
+                    var array = [];
+                    var len = data.Files.length;
+                    for (var i = 0; i < len; i++) {
+                        var o = data.Files[i];
+                        array.push('<li >' + o.name + '</li>');
+                    }
+                    html = html.concat(array)
+                }
+                return html.join('');
+
+            }
+        });
+        //ayatta.filer.open();
+    </script>
+}

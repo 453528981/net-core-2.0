@@ -1,0 +1,182 @@
+@model SlideListModel
+<div class="container">
+
+    <div class="card">
+        <form action="?" method="get">
+            <div class="card-header ch-alt">
+                <h2>幻灯片 列表</h2>
+                <ul class="actions">
+                    <li>
+                        <a href="/sys/slide-detail/" title="添加">
+                            <i class="zmdi zmdi-plus c-red"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body card-padding">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="fg-line form-group">
+                            <input type="text" name="keyword" value="@(Model.Keyword)" class="form-control input-sm" placeholder="Id/名称">
+                        </div>
+                    </div>
+                    @*<div class="col-xs-3">
+                            <div class="fg-line form-group">
+                                <input type="text" name="code" value="@(Model.Param.Code)" class="form-control input-sm" placeholder="商家编号">
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <div class="fg-line form-group">
+                                <input type="text" name="cRId" value='@(Model.Param.CRId>0?Model.Param.CRId.ToString():"")' class="form-control input-sm"
+                                       placeholder="一级类目">
+                            </div>
+                        </div>
+
+                        <div class="col-xs-2">
+                            <div class="fg-line form-group">
+                                <input type="text" name="priceFrom" value='@(Model.Param.PriceFrom>0?Model.Param.PriceFrom.ToString():"")' class="form-control input-sm"
+                                       placeholder="价格>=" onkeyup="this.value=this.value.replace(/\D/g, '');" />
+                            </div>
+                        </div>
+                        <div class="col-xs-2">
+                            <div class="fg-line form-group">
+                                <input type="text" name="priceEnd" value='@(Model.Param.PriceEnd>0?Model.Param.PriceEnd.ToString():"")' class="form-control input-sm"
+                                       placeholder="价格<=" onkeyup="this.value=this.value.replace(/\D/g, '');" />
+                            </div>
+                        </div>
+                        <div class="col-xs-2">
+                            <div class="fg-line form-group">
+                                <input type="text" name="saleFrom" value='@(Model.Param.SaleFrom>0?Model.Param.SaleFrom.ToString():"")' class="form-control input-sm"
+                                       placeholder="销量>=" onkeyup="this.value=this.value.replace(/\D/g, '');" />
+                            </div>
+                        </div>
+                        <div class="col-xs-2">
+                            <div class="fg-line form-group">
+                                <input type="text" name="saleEnd" value='@(Model.Param.SaleEnd>0?Model.Param.SaleEnd.ToString():"")' class="form-control input-sm"
+                                       placeholder="销量<=" onkeyup="this.value=this.value.replace(/\D/g, '');" />
+                            </div>
+                        </div>
+                        <div class="col-xs-2">
+                            <div class="fg-line form-group">
+                                <input type="text" name="status" class="form-control input-sm" placeholder="状态">
+                            </div>
+                        </div>*@
+                    <div class="col-xs-1">
+                        <div class="fg-line form-group">
+                            <button type="reset" class="btn btn-default waves-effect">重 置</button>
+                        </div>
+                    </div>
+                    <div class="col-xs-1">
+                        <div class="fg-line form-group">
+                            <button type="submit" class="btn bgm-cyan waves-effect">查 找</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body table-responsive">
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                <label class="checkbox checkbox-inline">
+                                    <input type="checkbox">
+                                    <i class="input-helper"></i>
+                                </label>
+                            </th>
+                            <th>
+                                Id
+                            </th>
+                            <th>
+                                名称
+                            </th>
+                            <th>
+                                标题
+                            </th>
+                            <th>
+                                长
+                            </th>
+                            <th>
+                                高
+                            </th>
+                            <th>
+                                缩略图
+                            </th>
+                            <th>
+                                描述
+                            </th>
+                            <th>
+                                排序
+                            </th>
+                            <th>状态</th>
+                            <th>创建时间</th>
+                            <th>操 作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var o in Model.Slides)
+                        {
+                            <tr>
+                                <td>
+                                    <label class="checkbox checkbox-inline">
+                                        <input type="checkbox" value="@(o.Id)">
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </td>
+                                <td>
+                                    @o.Id
+                                </td>
+                                <td title="@(o.Name)">
+
+                                    <a href="/sys/slide-item-list/@(o.Id)">@(o.Name)</a>
+                                </td>
+                                <td>
+                                    @o.Title
+                                </td>
+                                <td>
+                                    @o.Width
+                                </td>
+                                <td>
+                                    @o.Height
+                                </td>
+                                <td>
+                                    缩略图
+                                </td>
+                                <td>
+                                    @o.Description
+                                </td>
+                                <td>
+                                    @o.Priority
+                                </td>
+                                <td>@o.Status</td>
+                                <td>
+                                    @(o.CreatedOn.ToString("yyyy-MM-dd HH:mm:ss"))
+                                </td>
+                                <td>
+                                    <a href="~/sys/slide-detail/@(o.Id)" title="编辑"><i class="zmdi zmdi-edit f-18 c-bluegray"></i></a>
+                                    <a href="~/sys/slide-delete/@(o.Id)" title="删除" class="m-l-10" onclick="deleteItem(this); return false;"><i class="zmdi zmdi-delete f-18 c-gray"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </form>
+    </div>
+</div>
+@section jsOmega{
+
+    <script>
+        function deleteItem(obj) {
+            var url = obj.href;
+            console.log(url);
+            return false;
+
+        }
+        $(function () {
+
+        });
+
+    </script>
+}

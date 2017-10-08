@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
+
+  <!--<ItemGroup>
+    <Compile Remove="wwwroot\ts\**" />
+    <Content Remove="wwwroot\ts\**" />
+    <EmbeddedResource Remove="wwwroot\ts\**" />
+    <None Remove="wwwroot\ts\**" />
+  </ItemGroup>-->
+
+  <ItemGroup>
+    <Content Remove="wwwroot/css\bootstrap-select.min.css" />
+    <Content Remove="wwwroot/js\dialog.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="wwwroot\" />
+    <Folder Include="wwwroot\css\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+    <PackageReference Include="MediatR" Version="3.0.1" />
+    
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="3.0.0" />
+    
+    <!--<PackageReference Include="Microsoft.AspNetCore" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.0.0" />-->   
+    
+    
+   
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\Module\Ayatta.Cart\Ayatta.Cart.csproj" />
+    <ProjectReference Include="..\..\Module\Ayatta.Domain\Ayatta.Domain.csproj" />
+    <ProjectReference Include="..\..\Module\Ayatta.OAuth\Ayatta.OAuth.csproj" />
+    <ProjectReference Include="..\..\Module\Ayatta.OnlinePay\Ayatta.OnlinePay.csproj" />
+    <ProjectReference Include="..\..\Module\Ayatta.Sms\Ayatta.Sms.csproj" />
+    <ProjectReference Include="..\..\Module\Ayatta.Storage\Ayatta.Storage.csproj" />
+    <ProjectReference Include="..\..\Module\Ayatta\Ayatta.csproj" />
+  </ItemGroup>
+  
+  <Import Project="..\Shared\Ayatta.Web.projitems" Label="Shared" /> 
+
+</Project>

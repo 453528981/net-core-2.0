@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="http://static.ayatta.com/js/template.js"></script>
+
+</head>
+<body>
+    <div id="content"></div>
+    <script id="test" type="text/html">
+        {{if isAdmin}}
+        {{each list  item i}}
+        <h1>{{item.title}}</h1>
+        <ul>
+            {{set xx=item.tags}}
+            {{each xx  tag i}}
+            <li>索引 {{i + 1}} ：{{tag}}</li>
+            {{/each}}
+        </ul>
+        {{/each}}
+        {{/if}}
+    </script>
+    <script>
+        var data = {
+            isAdmin: true,
+            list: [{
+                title: 'xxx1',
+                tags: ['文艺1', '博客1', '摄影1', '电影1']
+            },
+            {
+                title: 'xxx2',
+                tags: ['文艺2', '博客2', '摄影2', '电影2']
+            }]
+        }
+        var html = template('test', data)
+        document.getElementById('content').innerHTML = html;
+    </script>
+</body>
+</html>

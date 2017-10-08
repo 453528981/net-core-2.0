@@ -1,0 +1,176 @@
+﻿@model ActPlanDetailModel
+
+<div class="container">
+    <div class="card">
+
+        <div class="card-header ch-alt">
+            <h2>@(Model.Plan.Id == 0 ? "添加" : "编辑") 官方活动计划</h2>
+
+        </div>
+        <div class="card-body card-padding">
+            @using (Html.BeginForm())
+            {
+
+                @if (Model.Plan.Id > 0)
+                {
+                    <div class="form-group">
+                        <div class="fg-line">
+                            <label for="input-Id">Id</label>
+                            <p class="form-control-static">@(Model.Plan.Id)</p>
+                        </div>
+                    </div>
+                }
+
+
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Name">名称</label>
+                        <input id="input-Name" name="Name" type="text" class="form-control" maxlength="50" value="@(Model.Plan.Name)" placeholder="名称">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Title">标题</label>
+                        <input id="input-Title" name="Title" type="text" class="form-control" maxlength="50" value="@(Model.Plan.Title)" placeholder="标题">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Icon">图标</label>
+                        <input id="input-Icon" name="Icon" type="text" class="form-control" maxlength="300" value="@(Model.Plan.Icon)" placeholder="图标">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Picture">图片</label>
+                        <input id="input-Picture" name="Picture" type="text" class="form-control" maxlength="300" value="@(Model.Plan.Picture)" placeholder="图片">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-OpendOn">报名开始时间</label>
+                        <input id="input-OpendOn" name="OpendOn" type="url" class="form-control date-time-picker" maxlength="18" value="@(Model.Plan.OpendOn.ToString("yyyy-MM-dd HH:mm:ss"))" p placeholder="报名开始时间">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-ClosedOn">报名结束时间</label>
+                        <input id="input-ClosedOn" name="ClosedOn" type="url" class="form-control date-time-picker" maxlength="18" value="@(Model.Plan.ClosedOn.ToString("yyyy-MM-dd HH:mm:ss"))" placeholder="报名结束时间">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-StartedOn">活动开始时间</label>
+                        <input id="input-StartedOn" name="StartedOn" type="url" class="form-control date-time-picker" maxlength="18" value="@(Model.Plan.StartedOn.ToString("yyyy-MM-dd HH:mm:ss"))" placeholder="活动开始时间">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-StoppedOn">活动结束时间</label>
+                        <input id="input-StoppedOn" name="StoppedOn" type="url" class="form-control date-time-picker" maxlength="18" value="@(Model.Plan.StoppedOn.ToString("yyyy-MM-dd HH:mm:ss"))" placeholder="活动结束时间">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-WarmUp">提前预热天数</label>
+                        <select id="input-WarmUp" name="WarmUp" class="form-control">
+                            <option value="0" @(Model.Plan.WarmUp == 0 ? "selected" : string.Empty)>0天</option>
+                            <option value="1" @(Model.Plan.WarmUp == 1 ? "selected" : string.Empty)>1天</option>
+                            <option value="2" @(Model.Plan.WarmUp == 2 ? "selected" : string.Empty)>2天</option>
+                            <option value="3" @(Model.Plan.WarmUp == 3 ? "selected" : string.Empty)>3天</option>
+                            <option value="4" @(Model.Plan.WarmUp == 4 ? "selected" : string.Empty)>4天</option>
+                            <option value="5" @(Model.Plan.WarmUp == 5 ? "selected" : string.Empty)>5天</option>
+                            <option value="6" @(Model.Plan.WarmUp == 6 ? "selected" : string.Empty)>6天</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Summary">描述</label>
+                        <input id="input-Summary" name="Summary" type="text" class="form-control" maxlength="200" value="@(Model.Plan.Summary)" placeholder="描述">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Priority">排序</label>
+                        <input id="input-Priority" name="Priority" type="text" class="form-control" maxlength="4" value="@(Model.Plan.Priority)" placeholder="排序">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Extra">备注</label>
+                        <input id="input-Extra" name="Extra" type="text" class="form-control" maxlength="300" value="@(Model.Plan.Extra)" placeholder="备注">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Status">状态</label>
+                        <select id="input-Status" name="Status" class="form-control">
+                            <option value="true" @(Model.Plan.Status ? "selected" : string.Empty)>可用</option>
+                            <option value="false" @(!Model.Plan.Status ? "selected" : string.Empty)>不可用</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary btn-lg btn-block waves-effect" onclick="submitForm(this);" data-loading-text="提交中...">
+                        提 交
+                    </button>
+
+                </div>
+            }
+        </div>
+
+    </div>
+</div>
+
+@section css{
+    <link href="@(WebSite.Static)/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+}
+@section js{
+    <script src="@(WebSite.Static)/js/moment.min.js"></script>
+    <script src="@(WebSite.Static)/js/bootstrap-datetimepicker.min.js"></script>
+
+}
+
+@section jsOmega{
+    <script type="text/javascript">
+
+        function submitForm(btn) {
+            var form = btn.form;
+            $(btn).button('loading');
+            var param = $(form).serialize();
+            $.post(form.action, param, function (r) {
+                if (r.status) {
+                    $(btn).button('reset');
+                    //notify('操作成功', 'success');
+                    /*
+                    if (result.Extra != null && result.Extra != "") {
+                        alert(result.Extra + "不存在");
+                    }
+                    if (result.Data != null) {
+                        setTimeout(function () {
+                            window.location = "/Trial/TrialPlanDetail/" + result.Data;
+                        }, 500);
+                    } else {
+                        window.location.reload();
+                    }
+                    */
+                }
+                else {
+                    $(btn).button('reset');
+                    //notify(result.Message, 'danger');
+                }
+            }, "json");
+            return false;
+        }
+
+        $(function () {
+            $('.date-time-picker').datetimepicker({ format: 'YYYY-MM-DD HH:mm:ss' });
+
+        });
+    </script>
+}

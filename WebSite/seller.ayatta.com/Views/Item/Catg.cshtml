@@ -1,0 +1,80 @@
+@model ItemModel.Catg
+<div class="container">
+    <div class="block-header">
+        <h2>Table</h2>
+
+        <ul class="actions">
+            <li>
+                <a href="">
+                    <i class="zmdi zmdi-trending-up"></i>
+                </a>
+            </li>
+            <li>
+                <a href="">
+                    <i class="zmdi zmdi-check-all"></i>
+                </a>
+            </li>
+            <li class="dropdown">
+                <a href="" data-toggle="dropdown">
+                    <i class="zmdi zmdi-more-vert"></i>
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li>
+                        <a href="">Refresh</a>
+                    </li>
+                    <li>
+                        <a href="">Manage Widgets</a>
+                    </li>
+                    <li>
+                        <a href="">Widgets Settings</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h2>Basic Table <small>Basic example without any additional modification classes</small></h2>
+        </div>
+
+        <div id="data-catgs" class="card-body table-responsive">
+            <div>
+
+                @foreach (var c in Model.Catgs)
+                {
+
+                    <p onclick="getCatgs(this,@(c.Id),@(c.ParentId),@(c.IsParent.ToString().ToLower()));"> @(c.Name)</p>
+
+                }
+
+            </div>
+
+        </div>
+    </div>
+</div>
+@section js{
+    <script>
+
+        function  getCatgs(obj,id,parentId,isParent){
+            if(!isParent){
+                window.location='/item/new?catgId='+id;
+            }
+            $(obj).parent().nextAll().remove();
+            $.getJSON('/global/catgs?parentId='+id,function(r){
+                console.log(r);
+                var html=[];
+                html.push('<div>');
+                for(var i=0;i<r.length;i++){
+                    var o=r[i];
+                    html.push('<p onclick="getCatgs(this,'+o.Id+','+o.ParentId+','+o.IsParent+');"> '+o.Name+'</p>');
+                }
+                html.push('</div>');
+                $("#data-catgs").append(html.join(''));
+            });
+
+        }
+    </script>
+}

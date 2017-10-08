@@ -1,0 +1,539 @@
+@model OrderListModel
+<div class="container">
+    <div class="block-header">
+        <h2>Table</h2>
+
+        <ul class="actions">
+            <li>
+                <a href="">
+                    <i class="zmdi zmdi-trending-up"></i>
+                </a>
+            </li>
+            <li>
+                <a href="">
+                    <i class="zmdi zmdi-check-all"></i>
+                </a>
+            </li>
+            <li class="dropdown">
+                <a href="" data-toggle="dropdown">
+                    <i class="zmdi zmdi-more-vert"></i>
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li>
+                        <a href="">Refresh</a>
+                    </li>
+                    <li>
+                        <a href="">Manage Widgets</a>
+                    </li>
+                    <li>
+                        <a href="">Widgets Settings</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+    </div>
+
+    <div class="card">
+        <form action="?" method="get">
+            <div class="card-header">
+                <h2>Basic Table <small>Basic example without any additional modification classes</small></h2>
+            </div>
+            <div class="card-body card-padding">
+
+            </div>
+            <div class="card-body table-responsive">
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 250px;">
+                                商品信息
+                            </th>
+                            <th>
+                                单价(元)
+                            </th>
+                            <th>
+                                数 量
+                            </th>
+                            <th>
+                                售 后
+                            </th>
+                            <th>
+                                买 家
+                            </th>
+                            <th>
+                                实收款(元)
+                            </th>
+                            <th>
+                                订单状态
+                            </th>
+                            <th>
+                                评 价
+                            </th>
+                        </tr>
+                    </thead>
+
+                    @foreach (var item in Model.Orders)
+                    {
+                        <tbody class="@(item.Status == OrderStatus.WaitBuyerPay ? "item-pending" : "item")">
+                            <tr class="item-header">
+                                <td colspan="8" class="text-align-left">
+                                    <div class="row">
+                                        <div class="col-md-1">
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" value="@(item.Id)" />&nbsp;
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            订单编号：@(item.Id)
+                                        </div>
+                                        <div class="col-md-3">
+                                            成交时间：@(item.CreatedOn.ToString("yyyy-MM-dd HH:mm:ss"))
+                                        </div>
+                                        <div class="col-md-3">@(item.BuyerName)</div>
+                                        <div class="col-md-1">
+                                            @if (!item.SellerMemo.IsNullOrEmpty())
+                                            {
+                                                <a class="" data-trigger="hover" data-toggle="popover" data-placement="left" data-content="@(item.SellerMemo)" data-o data-original-title="备 注" href="javascript:void(0);"><i class="zmdi zmdi-flag f-18"></i></a>
+
+                                            }
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            @for (var i = 0; i < item.Items.Count; i++)
+                            {
+                                var temp = item.Items[i];
+                                <tr @(i < item.Items.Count - 1 ? "class=light" : string.Empty)>
+                                    <td class="col  @(item.Items.Count > 1 ? "multiple light" : string.Empty)">
+                                        <div class="media">
+                                            <a class="pull-left" href="@(string.Format("{0}/{1}.html", WebSite.Item, item.Id))" target="_blank">
+                                                <img class="media-object" src="@(temp.Picture)" alt="@(temp.Name)" />
+                                            </a>
+                                            <div class="media-body">
+                                                <h5 class="media-heading">
+                                                    @(temp.Name)
+                                                </h5>
+                                                <p>
+                                                    @*@foreach (var o in temp.PropText.OrderBy(o => o.Length))
+                                                        {
+                                                            @(o)<br />
+                                                        }*@
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="col @(item.Items.Count > 1 ? "multiple light" : string.Empty)">
+                                        @(temp.Price.ToString("N"))
+                                    </td>
+                                    <td class="col @(item.Items.Count > 1 ? "multiple light" : string.Empty)">
+                                        @(temp.Quantity)
+                                    </td>
+                                    <td class="col @(item.Items.Count > 1 ? "light" : string.Empty)">
+                                        @if (!temp.RefundId.IsNullOrEmpty() && temp.RefundStatus > 0)
+                                        {
+                                            <p>
+                                                <a href="/refund/detail/@temp.RefundId">退 款</a>
+                                            </p>
+                                        }
+                                    </td>
+                                    @if (i == 0)
+                                    {
+                                        <td class="col" @(item.Items.Count > 1 ? "rowspan=" + (item.Items.Count) : string.Empty)>
+                                            <p>
+                                                <span title="@(item.CreatedBy)">@(item.BuyerName)</span>&nbsp;<a title="查询@(item.BuyerName)的订单" href="javascript:void(0);">
+                                                    <i class="icon-filter"></i>
+                                                </a>
+                                            </p>
+                                        </td>
+                                        <td class="col" @(item.Items.Count > 1 ? "rowspan=" + (item.Items.Count) : string.Empty)>
+                                            <p>
+                                                <strong>@(item.Total.ToString("N"))</strong>
+                                            </p>
+                                            @if (item.Freight == 0)
+                                            {
+                                                <p>
+                                                    <span>免运费</span>
+                                                </p>
+                                            }
+                                            else
+                                            {
+                                                <p>
+                                                    <span>含快递：@(item.Freight.ToString("N"))</span>
+                                                </p>
+                                            }
+                                            <p>
+                                                <span>订单优惠：@(item.Discount.ToString("N"))</span>
+                                            </p>
+                                        </td>
+                                        <td class="col" @(item.Items.Count > 1 ? "rowspan=" + (item.Items.Count) : string.Empty)>
+                                            @if (item.Status == OrderStatus.None || item.Status == OrderStatus.Pending || item.Status == OrderStatus.WaitBuyerPay)
+                                            {
+                                                <p>
+                                                    <a href="/order-detail/@(item.Id)" target="_blank">等待买家付款</a>
+                                                </p>
+                                                <p>
+                                                    <a href="/order-cancel/@(temp.OrderId)" data-trigger="modal">关闭交易</a>
+                                                </p>
+                                            }
+                                            else if (item.Status == OrderStatus.WaitSellerSend)
+                                            {
+                                                <p>
+                                                    <a href="/order/detail/@(item.Id)" target="_blank">已付款待发货</a>
+                                                </p>
+                                                <p>
+                                                    <a href="/order/consign/@(item.Id)" target="_blank">发 货</a>
+                                                </p>
+
+                                            }
+                                            else if (item.Status == OrderStatus.SellerSendPart)
+                                            {
+                                                <p>
+                                                    <a class="order-status" href="/order/detail/@(item.Id)" target="_blank">部分发货</a>
+                                                </p>
+                                                <p>
+                                                    <a href="/order/consign/@(item.Id)" target="_blank">发 货</a>
+                                                </p>
+                                            }
+                                            else if (item.Status == OrderStatus.WaitBuyerConfirm)
+                                            {
+                                                <p>
+                                                    <a class="order-status" href="/order/detail/@(item.Id)" target="_blank">已发货待确认</a>
+                                                </p>
+                                                <p>
+                                                    <a data-trigger="modal" href="/order/close/@(item.Id)" data-title="延长收货时间">延长收货时间</a>
+                                                </p>
+                                            }
+                                            else if (item.Status == OrderStatus.Canceled)
+                                            {
+                                                <a class="order-status" href="/order/detail/@(item.Id)" target="_blank">交易关闭</a>
+                                            }
+                                            else if (item.Status == OrderStatus.Finished)
+                                            {
+                                                <a class="order-status" href="/order/detail/@(item.Id)" target="_blank">交易成功</a>
+                                            }
+                                        </td>
+                                        <td class="ui-table-action" @(item.Items.Count > 1 ? "rowspan=" + (item.Items.Count) : string.Empty)>
+                                            @*@if (item.BuyerRate && item.SellerRate)
+                                                {
+                                                    <p>
+                                                        <span>双方已评</span>
+                                                    </p>
+                                                }*@
+                                            <p>
+                                                <a href="/order-memo/@(temp.OrderId)" data-trigger="modal">
+                                                    备 忘
+                                                </a>
+                                            </p>
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                            <tr class="item-footer">
+                                <td colspan="8"></td>
+                            </tr>
+                        </tbody>
+                    }
+                </table>
+            </div>
+        </form>
+    </div>
+</div>
+<div><a data-trigger="modal" href="/weed">weed</a></div>
+@section content{
+    <div id="modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-label"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+}
+@section js{
+<script src="@(WebSite.Static)/js/bootstrap-dialog.js"></script>
+    <script>
+        +function ($) {
+            var d = "";
+
+
+
+        }(jQuery);
+
+        //$(function () {
+
+        //    $('[data-rel="popover"]').popover();
+        //    $('#modal').on('hidden.bs.modal', function (e) {
+
+        //        $('.modal-content').empty();
+        //        $('#modal').removeData('bs.modal');
+        //    });
+        //    //$("#dynamic-placeholder").load('/imgs');
+        //});
+        $.package('ayatta.filer', function () {
+            var latest = [];//最新的
+            var selected = {};//选中的
+            //var data = [];
+            var modal = $('<div class="modal fade in"><div class="modal-dialog"><div class="modal-content"/></div></div>');
+            this.open = function (options) {
+                options = options || { remote: '/weed' };
+                //modal.find('.modal-content').load(options.remote, function () {
+                //    modal.appendTo(options.appendTo || document.body).show();
+                //});
+                $.getJSON(options.remote, function (data) {
+                    modal.find('.modal-content').html(buildHtml(data));
+                    modal.appendTo(options.appendTo || document.body).show();
+                });
+            }
+
+            this.dir = function (dir) {
+                $.getJSON('/weed', { dir: dir }, function (data) {
+                    modal.find('.modal-content').html(buildHtml(data));
+                });
+            }
+
+            this.load = function (dir, last) {
+
+            }
+
+            this.onItemClick = function (obj, key, value) {
+                if ($(obj).hasClass()) {
+                    delete selected[key];
+                    $(obj).removeClass('selected');
+                } else {
+                    selected[key] = value;
+                    $(obj).addClass('selected');
+                }
+            }
+
+
+            this.itemUpload = function () {
+
+            }
+            this.close = function () {
+                modal.remove();
+            }
+
+            function buildHtml(data) {
+                var html = [];
+                var crumb = '';
+                if (data.Directories) {
+                    var array = [];
+                    var len = data.Directories.length;
+                    for (var i = 0; i < len; i++) {
+                        var o = data.Directories[i];
+                        array.push('<li onclick=ayatta.filer.dir("' + o.Name + '")>' + o.Name + '</li>');
+                    }
+                    html = html.concat(array)
+                }
+                if (data.Files) {
+                    var array = [];
+                    var len = data.Files.length;
+                    for (var i = 0; i < len; i++) {
+                        var o = data.Files[i];
+                        array.push('<li >' + o.name + '</li>');
+                    }
+                    html = html.concat(array)
+                }
+                return html.join('');
+
+            }
+        });
+        //ayatta.filer.open();
+    </script>
+}
+@section cssOmega{
+    <style>
+        .table > tbody + tbody {
+            border-top: none;
+        }
+
+        .ui-box-alpha {
+            border: 1px solid #CCCCCC;
+            background-color: #FFF;
+            border-radius: 3px 3px 3px 3px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+            .ui-box-alpha .ui-box-head {
+                border-bottom: 3px solid #a30806;
+                font-family: "微软雅黑";
+                height: 50px;
+                line-height: 27px;
+            }
+
+                .ui-box-alpha .ui-box-head .ui-box-head-title {
+                    font-weight: bold;
+                    color: #a30806;
+                    font-size: larger;
+                }
+
+            .ui-box-alpha .ui-box-container-noborder {
+                border: none;
+            }
+
+            .ui-box-alpha .ui-box-container-head {
+                background: url("http://static.ayatta.com/img/tb-th.gif") repeat-x scroll 0 7px transparent;
+                border-bottom: 1px solid #C30000;
+                border-top: 1px solid #E2E8ED;
+                color: #C30000;
+                font-family: "微软雅黑";
+                font-size: 14px;
+                font-weight: bold;
+                height: 35px;
+                line-height: 35px;
+                padding-left: 20px;
+            }
+
+            .ui-box-alpha .ui-box-content-special {
+                height: 20px;
+            }
+
+        .ui-table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 12px;
+            text-align: left
+        }
+
+            .ui-table tr:nth-child(even), .ui-table-split, .ui-table-hover {
+                background-color: #FBFBFB
+            }
+
+            .ui-table tr {
+                color: gray
+            }
+
+            .ui-table thead tr {
+                color: #666
+            }
+
+            .ui-table thead {
+                color: #666;
+                background-color: #F6F6F6;
+                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F8F8F8', endColorstr='#F2F2F2');
+                background: -webkit-gradient(linear,left top,left bottom,from(#F8F8F8),to(#F2F2F2));
+                background: -moz-linear-gradient(top,#F8F8F8,#F2F2F2);
+                background: -o-linear-gradient(top,#F8F8F8,#F2F2F2);
+                background: linear-gradient(top,#F8F8F8,#F2F2F2)
+            }
+
+            .ui-table th {
+                padding: 7px 9px;
+                border-bottom: 1px solid #d9d9d9;
+                text-align: left
+            }
+
+            .ui-table td {
+                padding: 8px 9px 7px;
+                border-bottom: 1px solid #d9d9d9
+            }
+
+            .ui-table th {
+                padding: 7px 9px
+            }
+
+            .ui-table tfoot td {
+                border-bottom: 0
+            }
+
+        .ui-table-noborder, .ui-table-noborder td, .ui-table-noborder tr, .ui-table-noborder th {
+            border: 0;
+            outline: 0
+        }
+
+            .ui-table-noborder .ui-table-split, .ui-table-noborder .ui-table-hover {
+                background-color: #f7f7f7
+            }
+
+        .ui-table-inbox {
+            border: 0;
+            outline: 0
+        }
+
+        .ui-table-container {
+            border: 1px solid #DCDFE5;
+            padding: 1px;
+        }
+
+        .ui-table-alpha {
+            color: #4D4D4D;
+        }
+
+            .ui-table-alpha thead {
+                font-size: 13px;
+            }
+
+                .ui-table-alpha thead tr th {
+                    border-top: 1px solid #E2E8ED;
+                    color: #444444;
+                    font-weight: normal;
+                    text-align: center;
+                    background: url("http://static.ayatta.com/img/tb-th.gif") repeat-x scroll 0 7px transparent;
+                    border-bottom: 1px solid #C30000;
+                }
+
+                    .ui-table-alpha thead tr th.text-align-left {
+                        text-align: left;
+                    }
+
+            .ui-table-alpha tbody tr td {
+                text-align: center;
+            }
+
+                .ui-table-alpha tbody tr td.text-align-left {
+                    text-align: left;
+                }
+
+                .ui-table-alpha tbody tr td div.media {
+                    text-align: left;
+                }
+
+            .ui-table-alpha tbody.item tr.item-header {
+                background-color: #F3F3F3;
+            }
+
+                .ui-table-alpha tbody.item tr.item-header td {
+                    border-bottom: 1px solid #E6E6E6;
+                }
+
+            .ui-table-alpha tbody.item-pending tr.item-header {
+                background-color: #E8F2FF;
+            }
+
+                .ui-table-alpha tbody.item-pending tr.item-header td {
+                    border-bottom: 1px solid #D4E7FF;
+                    border-top: 1px solid #D4E7FF;
+                }
+
+                    .ui-table-alpha tbody.item-pending tr.item-header td.text-align-left {
+                        text-align: left;
+                    }
+
+            .ui-table-alpha tbody td.col {
+                border-right: 1px solid #E6E6E6;
+            }
+
+            .ui-table-alpha tbody tr.item-header td {
+                border-bottom: 1px solid #D9D9D9;
+                border-top: 1px solid #D9D9D9;
+            }
+
+            .ui-table-alpha tbody tr.item-footer td {
+                border: none;
+                line-height: 20px;
+                height: 20px;
+            }
+
+            .ui-table-alpha tbody td.multiple {
+                border-right: 1px dashed #D9D9D9;
+            }
+
+            .ui-table-alpha tbody tr.light td.light {
+                border-bottom: 1px dashed #D9D9D9;
+            }
+    </style>
+}

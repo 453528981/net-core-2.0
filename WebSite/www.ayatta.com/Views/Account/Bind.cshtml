@@ -1,0 +1,113 @@
+﻿<div class="container-wrap">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-5 col-sm-offset-6">
+                <!-- Padding -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="c-pink">免费注册</h2>
+                        <small class="pull-right">已有账号 <a href="/">请登录</a></small>
+                    </div>
+
+                    <div class="card-body card-padding">
+
+                        @using (Html.BeginForm())
+                        {
+                            <div id="form-group-for-uid" class="form-group">
+                                <label class="control-label" for="uid">
+                                    手机号码
+                                </label>
+                                <div class="row">
+                                    <div class="col-sm-8">
+                                        <input type="text" id="uid" name="uid" class="form-control" autocomplete="off"
+                                               maxlength="11" onkeyup="app.account.validateUid(this);" placeholder="请输入手机号码" />
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <p class="form-control-static">
+                                            <button id="btn-get-captcha" disabled="disabled" type="button" class="btn btn-default waves-effect" onclick="app.account.getCaptcha(this);">
+                                                获取验证码
+                                            </button>
+                                        </p>
+                                    </div>
+                                </div>
+                                <p id="help-block-for-uid" class="help-block">
+
+                                </p>
+                            </div>
+                            <div id="form-group-for-captcha" class="form-group" style="display:none;">
+                                <label class="control-label" for="captcha">
+                                    手机验证码
+                                </label>
+
+                                <input type="text" id="captcha" name="captcha" class="form-control"
+                                       maxlength="6" placeholder="请输入手机验证码（2分钟内有效）" />
+
+                            </div>
+
+                            <div class="form-group">
+                                <label for="pwd" class="control-label">
+                                    登录密码
+                                </label>
+                                <input type="password" class="form-control" id="pwd" name="pwd" maxlength="18"
+                                       placeholder="请输入登录密码" onblur="app.account.validatePwd(this, false);"
+                                       autocomplete="off" onkeydown="if (event.ctrlKey) return false;" onmousedown="this.oncontextmenu = function() { return false; } "
+                                       onpaste="return false" />
+                                <p class="help-block">
+                                    6-18个字符（至少包含两个字母、两个数字、一个特殊字符）
+                                </p>
+
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="repwd" class="control-label">
+                                    确认密码
+                                </label>
+                                <input type="password" class="form-control" id="repwd" name="repwd" maxlength="18"
+                                       placeholder="请再次输入登录密码" onblur="app.account.validatePwd(this, true);"
+                                       autocomplete="off" onkeydown="if(event.ctrlKey) return false;" onmousedown="this.oncontextmenu = function() { return false;} "
+                                       onpaste="return false" />
+
+                            </div>
+
+                            <div class="form-group">
+                                <label class="checkbox checkbox-inline">
+                                    <input type="checkbox" name="agreen" value="true" checked="checked" onclick="if(this.checked){this.value='true';document.getElementById('btn-sign-up').disabled = false;}else{this.value='false';document.getElementById('btn-sign-up').disabled = true;}">
+                                    <i class="input-helper"></i>
+                                    我已阅读并同意<a>《用户注册协议》</a>
+                                </label>
+
+                            </div>
+
+                            <div class="form-group">
+                                <p id="notice-msg" class="c-orange"></p>
+                                <button id="btn-sign-up" type="button" class="btn bgm-pink btn-lg btn-block waves-effect" onclick="app.account.signUp(this);" data-default-text="注 册" data-loading-text="提交中...">注 册</button>
+
+                            </div>
+
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+@section js{
+
+
+}
+@section jsOmega{
+    <script src="~/js/app.account.js" asp-version="true"></script>
+    <script>
+
+        $(function () {
+
+
+
+        });
+    </script>
+}

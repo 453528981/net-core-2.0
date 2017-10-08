@@ -1,0 +1,66 @@
+﻿@section cssOmega{
+<link href="@(WebSite.Static)/css/bootstrap-treeview.min.css" rel="stylesheet"> 
+
+<style>
+   .table > tbody > tr > td {
+       vertical-align:middle
+   }
+.form-input-sm{padding:4px 8px;}
+
+</style>
+} 
+@section js{
+
+<script src="@(WebSite.Static)/js/bootstrap-treeview.min.js?v=x"></script>
+
+} 
+
+@section jsOmega{
+
+<script>
+    $(function() {
+        $.getJSON('/catg/nodes', function(data) {
+
+            $('#catg-tree').treeview({
+                data: data,
+                onNodeSelected: function(event, data) {
+                    //console.log(data);
+                    if (data.isParent) {        
+                        $("#catg-props").html('');
+                        $("#catg-prop-values").html('');                        
+                        $("#catg-children").load("/catg/children/"+data.id);
+                    }else{      
+                        $("#catg-children").html('');            
+                        $("#catg-prop-values").html('');
+                        $("#catg-props").load("/catg/props/"+data.id);
+                    }
+                }
+            });
+        });
+    });
+
+    function loadPropValues(catgId,propId){
+        $("#catg-prop-values").load("/catg/propvalues/"+catgId+"/"+propId);
+    }
+   
+</script>
+}
+
+<div class="container">
+    <div class="block-header">
+        <h2>类目</h2>
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-sm-4">
+            <div id="catg-tree"></div>
+        </div>
+        <div class="col-md-9 col-sm-8">
+            <div id="catg-children">
+            </div>
+            <div id="catg-props">
+            </div>
+            <div id="catg-prop-values">
+            </div>
+        </div>
+    </div>
+</div>

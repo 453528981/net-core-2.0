@@ -1,0 +1,168 @@
+﻿@model PaymentPlatformDetailModel
+
+<div class="container">
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>@(Model.PaymentPlatform.Id == 0 ? "添加" : "编辑") 支付平台</h2>
+        </div>
+        <div class="card-body card-padding">
+            @using (Html.BeginForm())
+            {
+
+                @if (Model.PaymentPlatform.Id > 0)
+                {
+                    <div class="form-group">
+                        <div class="fg-line">
+                            <label for="input-Id">Id</label>
+                            <p class="form-control-static">@(Model.PaymentPlatform.Id)</p>
+                        </div>
+                    </div>
+                }
+
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Name">名称</label>
+                        <input id="input-Name" name="Name" type="text" class="form-control" maxlength="20" value="@(Model.PaymentPlatform.Name)" placeholder="名称">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-IconSrc">图标</label>
+                        <input id="input-IconSrc" name="IconSrc" type="text" class="form-control" maxlength="300" value="@(Model.PaymentPlatform.IconSrc)" placeholder="图标">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-MerchantId">商户号</label>
+                        <input id="input-MerchantId" name="MerchantId" type="text" class="form-control" maxlength="50" value="@(Model.PaymentPlatform.MerchantId)" placeholder="商号">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-PublicKey">公钥</label>
+                        <input id="input-PublicKey" name="PublicKey" type="text" class="form-control" value="@(Model.PaymentPlatform.PublicKey)" placeholder="公钥">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-PrivateKey">私钥</label>
+                        <input id="input-PrivateKey" name="PrivateKey" type="text" class="form-control" value="@(Model.PaymentPlatform.PrivateKey)" placeholder="私钥">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-GatewayUrl">网关URL</label>
+                        <input id="input-GatewayUrl" name="GatewayUrl" type="url" class="form-control" maxlength="200" value="@(Model.PaymentPlatform.GatewayUrl)" placeholder="网关URL">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-CallbackUrl">回调RUL</label>
+                        <input id="input-CallbackUrl" name="CallbackUrl" type="url" class="form-control" maxlength="200" value="@(Model.PaymentPlatform.CallbackUrl)" placeholder="回调RUL">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-NotifyUrl">通知URL</label>
+                        <input id="input-NotifyUrl" name="NotifyUrl" type="url" class="form-control" maxlength="200" value="@(Model.PaymentPlatform.NotifyUrl)" placeholder="通知URL">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-QueryUrl">查询URL</label>
+                        <input id="input-QueryUrl" name="QueryUrl" type="url" class="form-control" maxlength="200" value="@(Model.PaymentPlatform.QueryUrl)" placeholder="查询URL">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-RefundUrl">退款URL</label>
+                        <input id="input-RefundUrl" name="RefundUrl" type="url" class="form-control" maxlength="200" value="@(Model.PaymentPlatform.RefundUrl)" placeholder="退款URL">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Description">描述</label>
+                        <input id="input-Description" name="Description" type="text" class="form-control" maxlength="200" value="@(Model.PaymentPlatform.Description)" placeholder="描述">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Priority">排序</label>
+                        <input id="input-Priority" name="Priority" type="text" class="form-control" maxlength="4" value="@(Model.PaymentPlatform.Priority)" placeholder="排序">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Extra">备注</label>
+                        <input id="input-Extra" name="Extra" type="text" class="form-control" maxlength="300" value="@(Model.PaymentPlatform.Extra)" placeholder="备注">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Status">状态</label>
+                        <select id="input-Status" name="Status" class="form-control">
+                            <option value="true" @(Model.PaymentPlatform.Status ? "selected" : string.Empty)>可用</option>
+                            <option value="false" @(!Model.PaymentPlatform.Status ? "selected" : string.Empty)>不可用</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary btn-lg btn-block waves-effect" onclick="submitForm(this);" data-loading-text="提交中...">
+                        提 交
+                    </button>
+
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@section cssOmega{
+    
+}
+
+@section js{
+
+    
+
+}
+@section jsOmega{
+
+
+    <script type="text/javascript">
+        function submitForm(btn) {
+            var form = btn.form;
+            $(btn).button('loading');
+            var param = $(form).serialize();
+            $.post(form.action, param, function (r) {
+                if (r.status) {
+                    $(btn).button('reset');
+                    //notify('操作成功', 'success');
+                    /*
+                    if (result.Extra != null && result.Extra != "") {
+                        alert(result.Extra + "不存在");
+                    }
+                    if (result.Data != null) {
+                        setTimeout(function () {
+                            window.location = "/Trial/TrialPlanDetail/" + result.Data;
+                        }, 500);
+                    } else {
+                        window.location.reload();
+                    }
+                    */
+                }
+                else {
+                    $(btn).button('reset');
+                    //notify(result.Message, 'danger');
+                }
+            }, "json");
+            return false;
+        }
+
+
+        $(document).ready(function () {
+            
+        });
+    </script>
+}

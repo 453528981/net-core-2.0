@@ -1,0 +1,80 @@
+﻿<div class="container">
+
+    <div class="row">
+        <div class="col-md-3 col-sm-4">
+            <div id="hierarchy-tree"></div>
+        </div>
+        <div class="col-md-9 col-sm-8">
+            <div id="hierarchy-item">
+
+            </div>
+
+        </div>
+       
+    </div>
+</div>
+
+
+@section cssOmega{
+    <link href="@(WebSite.Static)/css/bootstrap-treeview.min.css" rel="stylesheet">
+
+    <style>
+
+    </style>
+}
+@section js{
+
+    <script src="@(WebSite.Static)/js/bootstrap-treeview.min.js?v=x"></script>
+
+} 
+@section jsOmega{
+
+    <script>
+        $(function () {
+            $.getJSON('/sys/module-data', function (data) {
+                var len = data.length;
+                var a = [];
+                var b = [];
+                for (var i = 0; i < len; i++) {
+                    data[i].tags = [data[i].nodes.length];
+                    if (i < 18) {
+                        a.push(data[i]);
+                    } else {
+                        b.push(data[i]);
+                    }
+                }
+
+                $('#hierarchy-tree').treeview({
+                    data: a,
+                    levels: 0,
+                    showTags: true,
+                    onNodeSelected: function (event, data) {
+                        //console.log(data);
+                        $("#hierarchy-item").load("/sys/module-detail/" + data.id);
+                    }
+                });
+               
+            });
+        });
+        function loadDetail(id, parentId) {
+            if (parentId) {
+                $("#hierarchy-item").load("/sys/module-detail/0?pid=" + parentId);
+            } else {
+                $("#hierarchy-item").load("/sys/module-detail/" + id);
+
+            }
+        }
+        function loadFuncList(moduleId) {
+            $("#hierarchy-item").load("/sys/module/" + moduleId+"/func-list");
+        }
+        function loadFuncDetail(moduleId, id) {
+            if (id>0) {
+                $("#hierarchy-item").load("/sys/module/" + moduleId + "/func-detail/"+id);
+            } else {
+                $("#hierarchy-item").load("/sys/module/" + moduleId + "/func-detail");
+
+            }
+
+        }
+    </script>
+}

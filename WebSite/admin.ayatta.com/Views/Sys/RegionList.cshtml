@@ -1,0 +1,71 @@
+﻿<div class="container">
+
+    <div class="row">
+        <div class="col-md-3 col-sm-4">
+            <div id="region-tree-1"></div>
+        </div>
+        <div class="col-md-6 col-sm-4">
+            <div id="region-detail">
+
+            </div>
+
+        </div>
+        <div class="col-md-3 col-sm-4">
+            <div id="region-tree-2"></div>
+        </div>
+    </div>
+</div>
+
+
+@section cssOmega{
+    <link href="@(WebSite.Static)/css/bootstrap-treeview.min.css" rel="stylesheet">
+
+    <style>
+
+    </style>
+}
+@section js{
+
+    <script src="@(WebSite.Static)/js/bootstrap-treeview.min.js?v=x"></script>
+
+} 
+@section jsOmega{
+
+    <script>
+        $(function () {
+            $.getJSON('/sys/region-data', function (data) {
+                var len = data.length;
+                var a = [];
+                var b = [];
+                for (var i = 0; i < len; i++) {
+                    data[i].tags = [data[i].nodes.length];
+                    if (i < 18) {
+                        a.push(data[i]);
+                    } else {
+                        b.push(data[i]);
+                    }
+                }
+
+                $('#region-tree-1').treeview({
+                    data: a,
+                    levels: 0,
+                    showTags: true,
+                    onNodeSelected: function (event, data) {
+                        //console.log(data);
+                        $("#region-detail").load("/sys/region-detail/" + data.id);
+                    }
+                });
+                $('#region-tree-2').treeview({
+                    data: b,
+                    levels: 0,
+                    showTags: true,
+                    onNodeSelected: function (event, data) {
+                        //console.log(data);
+                        $("#region-detail").load("/sys/region-detail/" + data.id);
+                    }
+                });
+            });
+        });
+
+    </script>
+}

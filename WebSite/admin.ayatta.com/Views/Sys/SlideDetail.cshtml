@@ -1,0 +1,146 @@
+﻿@model SlideDetailModel
+
+<div class="container">
+    <div class="card">
+
+        <div class="card-header ch-alt">
+            <h2>@(Model.Slide.Id.IsNullOrEmpty() ? "添加" : "编辑") 幻灯片</h2>
+
+        </div>
+        <div class="card-body card-padding">
+            @using (Html.BeginForm())
+            {
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Id">Id</label>
+                        @if (Model.Slide.Id.IsNullOrEmpty())
+                        {
+                            <input id="input-Id" name="Id" type="text" class="form-control" maxlength="3" value="@(Slide.NewId)" placeholder="Id">
+
+                        }
+                        else
+                        {
+                            <p class="form-control-static">@(Model.Slide.Id)</p>
+
+                        }
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Name">名称</label>
+                        <input id="input-Name" name="Name" type="text" class="form-control" maxlength="50" value="@(Model.Slide.Name)" placeholder="名称">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Title">标题</label>
+                        <input id="input-Title" name="Title" type="text" class="form-control" maxlength="50" value="@(Model.Slide.Title)" placeholder="标题">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Width">图片宽</label>
+                        <input id="input-Width" name="Width" type="text" class="form-control" maxlength="3" value="@(Model.Slide.Width)" placeholder="图片宽">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Height">图片高</label>
+                        <input id="input-Height" name="Height" type="text" class="form-control" maxlength="3" value="@(Model.Slide.Height)" placeholder="图片高">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="checkbox checkbox-inline">
+                        <input type="checkbox" value="@(Model.Slide.Thumb)" onclick="if (this.checked) { $('.thumb-r').show(); } else {$('.thumb-r').hide();  }">
+                        <i class="input-helper"></i>
+                        <span>缩略图</span>
+                    </label>
+                </div>
+                <div class="form-group thumb-r">
+                    <div class="fg-line">
+                        <label for="input-ThumbW">缩略图宽</label>
+                        <input id="input-ThumbW" name="ThumbW" type="text" class="form-control" maxlength="3" value="@(Model.Slide.ThumbW)" placeholder="缩略图宽">
+                    </div>
+                </div>
+                <div class="form-group thumb-r">
+                    <div class="fg-line">
+                        <label for="input-ThumbH">缩略图高</label>
+                        <input id="input-ThumbH" name="ThumbH" type="text" class="form-control" maxlength="3" value="@(Model.Slide.ThumbH)" placeholder="缩略图高">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Description">描述</label>
+                        <input id="input-Description" name="Description" type="text" class="form-control" maxlength="200" value="@(Model.Slide.Description)" placeholder="描述">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Priority">排序</label>
+                        <input id="input-Priority" name="Priority" type="text" class="form-control" maxlength="4" value="@(Model.Slide.Priority)" placeholder="排序">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Extra">备注</label>
+                        <input id="input-Extra" name="Extra" type="text" class="form-control" maxlength="300" value="@(Model.Slide.Extra)" placeholder="备注">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Status">状态</label>
+                        <select id="input-Status" name="Status" class="form-control">
+                            <option value="true" @(Model.Slide.Status ? "selected" : string.Empty)>可用</option>
+                            <option value="false" @(!Model.Slide.Status ? "selected" : string.Empty)>不可用</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary btn-lg btn-block waves-effect" onclick="submitForm(this);" data-loading-text="提交中...">
+                        提 交
+                    </button>
+
+                </div>
+            }
+        </div>
+
+    </div>
+</div>
+
+@section js{
+
+    <script type="text/javascript">
+
+        function submitForm(btn) {
+            var form = btn.form;
+            $(btn).button('loading');
+            var param = $(form).serialize();
+            $.post(form.action, param, function (r) {               
+                if (r.status) {
+                    $(btn).button('reset');
+                    //notify('操作成功', 'success');
+                    /*
+                    if (result.Extra != null && result.Extra != "") {
+                        alert(result.Extra + "不存在");
+                    }
+                    if (result.Data != null) {
+                        setTimeout(function () {
+                            window.location = "/Trial/TrialPlanDetail/" + result.Data;
+                        }, 500);
+                    } else {
+                        window.location.reload();
+                    }
+                    */
+                }
+                else {
+                    $(btn).button('reset');
+                    //notify(result.Message, 'danger');
+                }
+            }, "json");
+            return false;
+        }
+    </script>
+}

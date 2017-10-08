@@ -1,0 +1,121 @@
+@model IList<Catg.Prop>
+<div class="card">
+    @using (Html.BeginForm())
+    {
+        <div class="card-header ch-alt">
+            <h2>属 性</h2>
+            <ul class="actions">
+                <li>
+                    <a href="javascript:void(0);">
+                        <i class="zmdi zmdi-check-all"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Id</th>
+                            <th title="属性名称">属性名</th>
+                            <th title="是否关键属性">关键</th>
+                            <th title="是否销售属性">销售</th>
+                            <th title="是否颜色属性">颜色</th>
+                            <th title="是否枚举属性">枚举</th>
+                            <th title="是否可输入属性 在IsEnumProp是true的前提下 卖家可以自行输入的属性 如果IsEnumProp返回false 该参数统一返回false">输入</th>
+                            <th title="是否商品属性 这个属性只能放于发布商品时使用">商品</th>
+                            <th title="是否为必选属性">必选</th>
+                            <th title="是否可以多选">多选</th>
+                            <th title="允许别名">别名</th>
+                            <th title="排列序号 大于零的整排列序号 从小到大排序">排序</th>
+                            <th title="">可用</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{var i = 1;} @foreach (var o in Model.Where(x => x.ParentPid == 0))
+                        {
+                            <tr>
+                                <td>@(i)</td>
+                                <td>
+                                    <a href="javascript:void(0);" onclick="loadPropValues(@(o.CatgId),@(o.Id));">@(o.Id)</a>
+                                    <input name="props[@(i)].Id" type="hidden" value='@(o.Id)' />
+                                </td>
+                                <td>
+                                    @(o.Name)
+                                    @*<input name="props[@(i)].Name" type="text" class="form-control input-sm" maxlength="10" value='@(o.Name)' style="width:140px;padding:4px 8px;" onkeypress="this.value=this.value.replace(/[^\u4e00-\u9fa5\A-Za-z0-9]/g, '')" />*@
+                                </td>
+
+                                <td>
+                                    <label class="checkbox checkbox-inline">
+                                        <input type="checkbox" name="props[@(i)].IsKeyProp" value="@(o.IsKeyProp.ToString().ToLower())" @(o.IsKeyProp ? "checked=checked" : "") onclick="if(this.checked){this.value='true'}else{this.value='false'}" />
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </td>
+                                <td>
+                                    <label class="checkbox checkbox-inline">
+                                        <input type="checkbox" name="props[@(i)].IsSaleProp" value="@(o.IsSaleProp.ToString().ToLower())" @(o.IsSaleProp ? "checked=checked" : "") onclick="if(this.checked){this.value='true'}else{this.value='false'}" />
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </td>
+                                <td>
+                                    <label class="checkbox checkbox-inline">
+                                        <input type="checkbox" name="props[@(i)].IsColorProp" value="@(o.IsColorProp.ToString().ToLower())" @(o.IsColorProp ? "checked=checked" : "") onclick="if(this.checked){this.value='true'}else{this.value='false'}" />
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </td>
+                                <td>
+                                    <label class="checkbox checkbox-inline">
+                                        <input type="checkbox" name="props[@(i)].IsEnumProp" value="@(o.IsEnumProp.ToString().ToLower())" @(o.IsEnumProp ? "checked=checked" : "") onclick="if(this.checked){this.value='true'}else{this.value='false'}" />
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </td>
+                                <td>
+                                    <label class="checkbox checkbox-inline">
+                                        <input type="checkbox" name="props[@(i)].IsInputProp" value="@(o.IsInputProp.ToString().ToLower())" @(o.IsInputProp ? "checked=checked" : "") onclick="if(this.checked){this.value='true'}else{this.value='false'}" />
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </td>
+                                <td>
+                                    <label class="checkbox checkbox-inline">
+                                        <input type="checkbox" name="props[@(i)].IsItemProp" value="@(o.IsItemProp.ToString().ToLower())" @(o.IsItemProp ? "checked=checked" : "") onclick="if(this.checked){this.value='true'}else{this.value='false'}" />
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </td>
+                                <td>
+                                    <label class="checkbox checkbox-inline">
+                                        <input type="checkbox" name="props[@(i)].Must" value="@(o.Must.ToString().ToLower())" @(o.Must ? "checked=checked" : "") onclick="if(this.checked){this.value='true'}else{this.value='false'}" />
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </td>
+                                <td>
+                                    <label class="checkbox checkbox-inline">
+                                        <input type="checkbox" name="props[@(i)].Multi" value="@(o.Multi.ToString().ToLower())" @(o.Multi ? "checked=checked" : "") onclick="if(this.checked){this.value='true'}else{this.value='false'}" />
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </td>
+                                <td>
+                                    <label class="checkbox checkbox-inline">
+                                        <input type="checkbox" name="props[@(i)].AllowAlias" value="@(o.AllowAlias.ToString().ToLower())" @(o.AllowAlias ? "checked=checked" : "") onclick="if(this.checked){this.value='true'}else{this.value='false'}" />
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </td>
+                                <td>
+                                    <input name="prop[@(i)].Priority" type="text" class="form-control input-sm" maxlength="4" value='@(o.Priority)' style="width:45px;padding:4px 8px;" onkeyup="this.value=this.value.replace(/\D/g, '');" />
+                                </td>
+                                <td>
+                                    <label class="checkbox checkbox-inline">
+                                        <input type="checkbox" name="props[@(i)].Status" value="@(o.Status)" @(o.Status == 0 ? "checked=checked" : "") onclick="if(this.checked){this.value=0}else{this.value=1}" />
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </td>
+                            </tr>
+                            i++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>

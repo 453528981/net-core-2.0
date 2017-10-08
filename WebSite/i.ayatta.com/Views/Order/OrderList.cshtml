@@ -1,0 +1,508 @@
+@model OrderListModel
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h2>我的订单 <small>Basic example without any additional modification classes</small></h2>
+        </div>
+        <div class="card-body">
+
+            <ul class="tab-nav" role="tablist" data-tab-color="red">
+                <li class="active">
+                    <a href="?type=0">全部订单</a>
+                </li>
+                <li class="">
+                    <a href="?type=1">待付款</a>
+                </li>
+                <li class="">
+                    <a href="?type=2">待收货</a>
+                </li>
+                <li class="">
+                    <a href="?type=3">待评价</a>
+                </li>
+                <li class="pull-right">
+                    <div class="m-10 p-relative" style="width:300px;">
+                        <input type="text" class="form-control input-sm" placeholder="商品名称/商品编号/订单号">
+                        <span style="position:absolute;right:0;top:0;">
+                            <button class="btn btn-sm btn-default waves-effect"><i class="zmdi zmdi-search"></i></button>
+                        </span>
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+        <div class="card-body  table-responsive">
+
+            <table class="table ui-table ui-table-alpha">
+                <thead>
+                    <tr>
+                        <th style="width: 250px;">
+                            商 品
+                        </th>
+                        <th>
+                            单 价
+                        </th>
+                        <th>
+                            数 量
+                        </th>
+                        <th>
+                            售 后
+                        </th>
+                        <th>
+                            收货人
+                        </th>
+                        <th>
+                            金 额
+                        </th>
+                        <th>
+                            订单状态
+                        </th>
+                        <th>
+                            操 作
+                        </th>
+                    </tr>
+                </thead>
+
+                @foreach (var item in Model.Orders)
+                {
+                    <tbody class="@(item.Status == OrderStatus.WaitBuyerPay ? "item-pending" : "item")">
+                        <tr class="item-header">
+                            <td class="text-left">
+                                订单号：@(item.Id)
+                            </td>
+                            <td colspan="4" class="text-left">
+                                <a>@(item.SellerName)</a>
+                            </td>
+                            <td colspan="2" class="text-right">
+                                <span style="color:#aaa;">
+                                    @(item.CreatedOn.ToString("yyyy-MM-dd HH:mm:ss"))
+                                </span>
+
+                            </td>
+                            <td>
+                                @if (!item.BuyerMemo.IsNullOrEmpty())
+                                {
+                                    <span data-trigger="hover" data-toggle="popover" data-placement="left" data-content="@(item.BuyerMemo)" data-original-title="备 忘">
+                                        <i class="zmdi zmdi-flag f-18 @(Order.FlagColorDic[item.BuyerFlag])">
+                                        </i>
+                                    </span>
+                                }
+                            </td>
+                        </tr>
+                        @for (var i = 0; i < item.Items.Count; i++)
+                        {
+                            var temp = item.Items[i];
+                            <tr @(i < item.Items.Count - 1 ? "class=light" : string.Empty )>
+                                <td class="col  @(item.Items.Count > 1 ? "multiple light" : string.Empty)">
+                                    <div class="media">
+                                        <a class="pull-left" href="@(string.Format("{0}/{1}.html", WebSite.Item, item.Id))" target="_blank">
+                                            <img class="media-object" src="http://asset.ayatta.com/7/1e07b4c75221.jpg?width=64&height=64" alt="@(temp.Name)" />
+                                        </a>
+                                        <div class="media-body">
+                                            <h5 class="media-heading f-13">
+                                                @(temp.Name)
+                                            </h5>
+                                            <p>
+                                                @foreach (var o in temp.PropTexts)
+                                                {
+                                                    <small>@(o)</small><br />
+
+                                                }
+                                            </p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="col @(item.Items.Count > 1 ? "multiple light" : string.Empty)">
+                                    ￥@(temp.Price.ToString("N"))
+                                </td>
+                                <td class="col @(item.Items.Count > 1 ? "multiple light" : string.Empty)">
+                                    x@(temp.Quantity)
+                                </td>
+                                <td class="col @(item.Items.Count > 1 ? "light" : string.Empty)">
+                                    @if (!temp.RefundId.IsNullOrEmpty() && temp.RefundStatus > 0)
+                                    {
+                                        <p>
+                                            <a href="/refund/detail/@temp.RefundId">退 款</a>
+                                        </p>
+                                    }
+                                </td>
+                                @if (i == 0)
+                                {
+                                    <td class="col" @(item.Items.Count > 1 ? "rowspan=" + (item.Items.Count) : string.Empty )>
+                                        <span data-trigger="hover" data-toggle="popover" data-placement="left" data-content="@(item.Address)" data-original-title="@(item.Receiver)">
+                                            <i class="zmdi zmdi-account">@(item.Receiver)</i>
+
+                                        </span>
+                                    </td>
+                                    <td class="col" @(item.Items.Count > 1 ? "rowspan=" + (item.Items.Count) : string.Empty )>
+                                        <p class="m-b-5">
+
+                                            <strong class="c-red">￥@(item.Total.ToString("N"))</strong>
+                                        </p>
+
+                                        <p class="m-b-5">
+
+                                            <span>运费：￥@(item.Freight.ToString("N"))</span>
+                                        </p>
+                                        <p class="m-b-5">
+
+                                            <span>优惠：￥@(item.Discount.ToString("N"))</span>
+                                        </p>
+                                    </td>
+                                    <td class="col" @(item.Items.Count > 1 ? "rowspan=" + (item.Items.Count) : string.Empty )>
+                                        <p class="m-b-5 c-gray">@(item.StatusText)</p>
+                                        <p class="m-b-5"><a href="/order/detail/@(item.Id)" target="_blank">订单详情</a></p>
+
+                                    </td>
+                                    <td class="ui-table-action" @( item.Items.Count > 1 ? "rowspan=" + (item.Items.Count) : string.Empty )>
+                                        @*@if (item.BuyerRate && item.SellerRate)
+                                            {
+                                            <p>
+                                            <span>双方已评</span>
+                                            </p>
+                                            }*@
+
+                                        @if (item.Status == OrderStatus.None || item.Status == OrderStatus.Pending || item.Status == OrderStatus.WaitBuyerPay)
+                                        {
+                                            <p class="m-b-5">
+                                                <a href="/order/cancel/@(temp.OrderId)" data-trigger="modal">取 消</a>
+                                            </p>
+                                        }
+
+                                        @if (item.Status == OrderStatus.WaitBuyerPay)
+                                        {
+                                            <p class="m-b-5">
+                                                <a href="/order/pay/@(item.Id)" target="_blank">支 付</a>
+                                            </p>
+                                        }
+
+                                        else if (item.Status == OrderStatus.WaitBuyerConfirm)
+                                        {
+                                            <p class="m-b-5">
+                                                <a class="order-status" href="/order/detail/@(item.Id)" target="_blank">确认收货</a>
+                                            </p>
+
+                                        }
+
+                                        <p class="m-b-5">
+                                            <a href="/order/memo/@(temp.OrderId)" data-trigger="modal">
+                                                备 忘
+                                            </a>
+                                        </p>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                        <tr class="item-footer">
+                            <td colspan="8"></td>
+                        </tr>
+                    </tbody>
+
+                }
+            </table>
+
+        </div>
+
+    </div>
+</div>
+<div><a data-trigger="modal" href="/weed">weed</a></div>
+@section content{
+    <div id="modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-label"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+}
+@section js{
+
+    <script src="@(WebSite.Static)/js/bootstrap-dialog.js"></script>
+
+    <script>
+        +function ($) {
+            var d = "";
+
+
+
+        }(jQuery);
+
+        //$(function () {
+
+        //    $('[data-rel="popover"]').popover();
+        //    $('#modal').on('hidden.bs.modal', function (e) {
+
+        //        $('.modal-content').empty();
+        //        $('#modal').removeData('bs.modal');
+        //    });
+        //    //$("#dynamic-placeholder").load('/imgs');
+        //});
+        $.package('ayatta.filer', function () {
+            var latest = [];//最新的
+            var selected = {};//选中的
+            //var data = [];
+            var modal = $('<div class="modal fade in"><div class="modal-dialog"><div class="modal-content"/></div></div>');
+            this.open = function (options) {
+                options = options || { remote: '/weed' };
+                //modal.find('.modal-content').load(options.remote, function () {
+                //    modal.appendTo(options.appendTo || document.body).show();
+                //});
+                $.getJSON(options.remote, function (data) {
+                    modal.find('.modal-content').html(buildHtml(data));
+                    modal.appendTo(options.appendTo || document.body).show();
+                });
+            }
+
+            this.dir = function (dir) {
+                $.getJSON('/weed', { dir: dir }, function (data) {
+                    modal.find('.modal-content').html(buildHtml(data));
+                });
+            }
+
+            this.load = function (dir, last) {
+
+            }
+
+            this.onItemClick = function (obj, key, value) {
+                if ($(obj).hasClass()) {
+                    delete selected[key];
+                    $(obj).removeClass('selected');
+                } else {
+                    selected[key] = value;
+                    $(obj).addClass('selected');
+                }
+            }
+
+
+            this.itemUpload = function () {
+
+            }
+            this.close = function () {
+                modal.remove();
+            }
+
+            function buildHtml(data) {
+                var html = [];
+                var crumb = '';
+                if (data.Directories) {
+                    var array = [];
+                    var len = data.Directories.length;
+                    for (var i = 0; i < len; i++) {
+                        var o = data.Directories[i];
+                        array.push('<li onclick=ayatta.filer.dir("' + o.Name + '")>' + o.Name + '</li>');
+                    }
+                    html = html.concat(array)
+                }
+                if (data.Files) {
+                    var array = [];
+                    var len = data.Files.length;
+                    for (var i = 0; i < len; i++) {
+                        var o = data.Files[i];
+                        array.push('<li >' + o.name + '</li>');
+                    }
+                    html = html.concat(array)
+                }
+                return html.join('');
+
+            }
+        });
+        //ayatta.filer.open();
+    </script>
+}
+@section cssOmega{
+    <style>
+        .table > tbody + tbody {
+            border-top: none;
+        }
+
+        .ui-box-alpha {
+            border: 1px solid #CCCCCC;
+            background-color: #FFF;
+            border-radius: 3px 3px 3px 3px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+            .ui-box-alpha .ui-box-head {
+                border-bottom: 3px solid #a30806;
+                font-family: "微软雅黑";
+                height: 50px;
+                line-height: 27px;
+            }
+
+                .ui-box-alpha .ui-box-head .ui-box-head-title {
+                    font-weight: bold;
+                    color: #a30806;
+                    font-size: larger;
+                }
+
+            .ui-box-alpha .ui-box-container-noborder {
+                border: none;
+            }
+
+            .ui-box-alpha .ui-box-container-head {
+                background: url("http://static.ayatta.com/img/tb-th.gif") repeat-x scroll 0 7px transparent;
+                border-bottom: 1px solid #C30000;
+                border-top: 1px solid #E2E8ED;
+                color: #C30000;
+                font-family: "微软雅黑";
+                font-size: 14px;
+                font-weight: bold;
+                height: 35px;
+                line-height: 35px;
+                padding-left: 20px;
+            }
+
+            .ui-box-alpha .ui-box-content-special {
+                height: 20px;
+            }
+
+        .ui-table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 12px;
+            text-align: left
+        }
+
+            .ui-table tr:nth-child(even), .ui-table-split, .ui-table-hover {
+                background-color: #FBFBFB
+            }
+
+            .ui-table tr {
+                color: gray
+            }
+
+            .ui-table thead tr {
+                color: #666
+            }
+
+            .ui-table thead {
+                color: #666;
+                background-color: #F6F6F6;
+                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F8F8F8', endColorstr='#F2F2F2');
+                background: -webkit-gradient(linear,left top,left bottom,from(#F8F8F8),to(#F2F2F2));
+                background: -moz-linear-gradient(top,#F8F8F8,#F2F2F2);
+                background: -o-linear-gradient(top,#F8F8F8,#F2F2F2);
+                background: linear-gradient(top,#F8F8F8,#F2F2F2)
+            }
+
+            .ui-table th {
+                padding: 7px 9px;
+                border-bottom: 1px solid #d9d9d9;
+                text-align: left
+            }
+
+            .ui-table td {
+                padding: 8px 9px 7px;
+                border-bottom: 1px solid #d9d9d9
+            }
+
+            .ui-table th {
+                padding: 7px 9px
+            }
+
+            .ui-table tfoot td {
+                border-bottom: 0
+            }
+
+        .ui-table-noborder, .ui-table-noborder td, .ui-table-noborder tr, .ui-table-noborder th {
+            border: 0;
+            outline: 0
+        }
+
+            .ui-table-noborder .ui-table-split, .ui-table-noborder .ui-table-hover {
+                background-color: #f7f7f7
+            }
+
+        .ui-table-inbox {
+            border: 0;
+            outline: 0
+        }
+
+        .ui-table-container {
+            border: 1px solid #DCDFE5;
+            padding: 1px;
+        }
+
+        .ui-table-alpha {
+            color: #4D4D4D;
+        }
+
+            .ui-table-alpha thead {
+                font-size: 13px;
+            }
+
+                .ui-table-alpha thead tr th {
+                    border-top: 1px solid #E2E8ED;
+                    color: #444444;
+                    font-weight: normal;
+                    text-align: center;
+                    background: url("http://static.ayatta.com/img/tb-th.gif") repeat-x scroll 0 7px transparent;
+                    border-bottom: 1px solid #C30000;
+                }
+
+                    .ui-table-alpha thead tr th.text-align-left {
+                        text-align: left;
+                    }
+
+            .ui-table-alpha tbody tr td {
+                text-align: center;
+            }
+
+                .ui-table-alpha tbody tr td.text-left {
+                    text-align: left;
+                }
+
+                .ui-table-alpha tbody tr td.text-right {
+                    text-align: right;
+                }
+
+                .ui-table-alpha tbody tr td div.media {
+                    text-align: left;
+                }
+
+            .ui-table-alpha tbody.item tr.item-header {
+                background-color: #F3F3F3;
+            }
+
+                .ui-table-alpha tbody.item tr.item-header td {
+                    border-bottom: 1px solid #E6E6E6;
+                }
+
+            .ui-table-alpha tbody.item-pending tr.item-header {
+                background-color: #E8F2FF;
+            }
+
+                .ui-table-alpha tbody.item-pending tr.item-header td {
+                    border-bottom: 1px solid #D4E7FF;
+                    border-top: 1px solid #D4E7FF;
+                }
+
+                    .ui-table-alpha tbody.item-pending tr.item-header td.text-align-left {
+                        text-align: left;
+                    }
+
+            .ui-table-alpha tbody td.col {
+                border-right: 1px solid #E6E6E6;
+            }
+
+            .ui-table-alpha tbody tr.item-header td {
+                border-bottom: 1px solid #D9D9D9;
+                border-top: 1px solid #D9D9D9;
+            }
+
+            .ui-table-alpha tbody tr.item-footer td {
+                border: none;
+                line-height: 20px;
+                height: 20px;
+            }
+
+            .ui-table-alpha tbody td.multiple {
+                border-right: 1px dashed #D9D9D9;
+            }
+
+            .ui-table-alpha tbody tr.light td.light {
+                border-bottom: 1px dashed #D9D9D9;
+            }
+    </style>
+}

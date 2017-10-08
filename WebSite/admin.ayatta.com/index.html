@@ -1,0 +1,30 @@
+﻿
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+    <title>Bootstrap 101 Template</title>
+    <script src="//static.ayatta.com/js/systemjs/system-production.js"></script>
+
+    
+    <script>
+        SystemJS.config({
+            // locate the plugin via map configuration
+            // (alternatively have it in the baseURL)
+            map: {
+                text: '/text.js'
+            }
+        });
+        System.import('text.txt!text').then(console.log.bind(console));
+    </script>
+
+</head>
+
+<body>
+
+
+</body>
+</html>

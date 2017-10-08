@@ -1,0 +1,108 @@
+﻿<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                &times;</button>
+            <h4 class="modal-title" id="modal-label">
+                邮箱绑定</h4>
+        </div>
+        <div class="modal-body">
+            <div id="form-group-for-email" class="form-group">
+                <div class="input-group">
+                    <input id="email" name="email" type="text" class="form-control" maxlength="35" placeholder="请输入您有效的电子邮箱" />
+                    <span class="input-group-btn">
+                        <button id="btn-email-bind" class="btn btn-info" type="button" onclick="emailBind();"
+                            data-default-text="绑定该邮箱" data-loading-text="邮箱验证中...">
+                            绑定该邮箱</button>
+                    </span>
+                </div>
+                <p id="help-block-for-email" class="help-block">
+                    如：example@baidu.com
+                </p>
+            </div>
+            <div id="email-bind-next" style="display: none;">
+                <p>
+                    我们已向您的邮箱<span id="bind-email" class="text-success"></span>发送认证邮件
+                </p>
+                <p>
+                    通过邮件中的链接地址，即可完成邮件绑定。邮件中的链接地址将在<span>30</span>分钟后失效，失效后请重新填写信息
+                </p>
+                <p>
+                    <a target="_blank">登录邮箱</a>完成账号激活 <span><a href="javascript:void(0);" onclick="reBind()">
+                        换个邮箱绑定</a></span>
+                </p>
+                <p class="text-danger">
+                    还没收到邮件？<span id="email-resend-timer">(<span id="email-resend-counter">120</span>)秒后</span>
+                    <a id="btn-email-resend" class="btn btn-warning disabled" href="javascript:void(0);"
+                        onclick="emailBind();">重新发送</a>
+                </p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+                关闭</button>
+        </div>
+    </div>
+    <!-- /.modal-content -->
+</div>
+<!-- /.modal-dialog -->
+<script type="text/javascript">
+    var reSendTimer = null;
+    function emailBind() {
+        var email = $('#email').val();
+        if (email.isEmail()) {
+            var url = '/security/emailbind';
+            $('#btn-email-bind').button('loading');
+            $.postJSON(url, { email: email }, function (result) {
+                if (result.Status == true) {
+                    $('#email').attr('readonly', 'readonly');
+                    $('#bind-email').text(email);
+                    $("#help-block-for-email").html('&nbsp;');
+
+                    $('#email-bind-next').show();
+
+                    $("#email-resend-counter").text(120);
+                    $('#email-resend-timer').show();
+                    $("#btn-email-resend").addClass('disabled');
+
+                    $('#form-group-for-email').removeClass('has-error').addClass('has-success');
+                    updateTimer();
+                }
+                else {
+                    $('#btn-email-bind').button('default');
+                    $("#help-block-for-email").html(result.Message);
+                    $('#form-group-for-email').removeClass('has-success').addClass('has-error');
+                }
+            });
+        }
+        else {
+            $("#help-block-for-email").html('请输入正确的邮箱！');
+            $('#form-group-for-email').removeClass('has-success').addClass('has-error');
+        }
+    }
+    function reBind() {
+        $('#email').val('').removeAttr('readonly');
+        $('#email-bind-next').hide();
+        $('#email-resend-timer').show();
+        $("#email-resend-counter").text(120);
+        $('#btn-email-bind').button('default');
+        $("#help-block-for-email").html('如：example@baidu.com！');
+        $('#form-group-for-email').removeClass('has-error').removeClass('has-success');
+        clearTimeout(reSendTimer);
+    }
+
+    function updateTimer() {
+        var i = parseInt($("#email-resend-counter").text());
+        if (i == 0) {
+            $('#email-resend-timer').hide();
+            $("#btn-email-resend").removeClass('disabled');
+            return;
+        }
+        $("#email-resend-counter").text(i - 1);
+        reSendTimer = setTimeout(updateTimer, 1000);
+    }
+
+    $(function () {
+        $('#email').typeahead({ source: emailSuffixSource });
+    });
+</script>

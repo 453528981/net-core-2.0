@@ -1,0 +1,223 @@
+﻿@model PromotionModel.ActivityDetail
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h2>
+                @(Model.Promotion.Id == 0 ? "新增" : "编辑")店铺活动
+                <small>1.填写基本信息 2.设置优惠门槛及内容 3.确认活动商品</small>
+            </h2>
+            <ul class="actions">
+                <li>
+                    <a href="~/promotion/activity-list" class="btn btn-danger btn-icon"><i class="md md-arrow-back"></i></a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card-body card-padding">
+            @using (Html.BeginForm())
+            {
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="control-Name">名 称</label>
+                        <input id="control-Name" name="Name" type="text" class="form-control" maxlength="100" value="@(Model.Promotion.Name)" placeholder="名 称">
+                    </div>
+                    <p class="help-block">
+                        限制在10个字符以内
+                    </p>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="control-Title">标 题</label>
+                        <input id="control-Title" name="Title" type="text" class="form-control" maxlength="100" value="@(Model.Promotion.Title)" placeholder="标 题">
+                    </div>
+                    <p class="help-block">
+                        限制在10个字符以内
+                    </p>
+                </div>
+                <div class="form-group">
+                    <label>适用平台</label>
+                    <div>
+                        @foreach (var o in Promotion.Activity.PlatformDic)
+                        {
+                            <label class="checkbox checkbox-inline m-r-20">
+                                <input type="checkbox" name="Platform" value="@(o.Key)" @((Model.Promotion.Platform & o.Key) == o.Key ? "checked=checked" : string.Empty)>
+                                <i class="input-helper"></i>
+                                <span>@(o.Value)</span>
+                            </label>
+                        }
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="control-StartedOn">开始时间</label>
+                        <input id="control-StartedOn" name="StartedOn" type="text" class="form-control date-time-picker" maxlength="19" value="@(Model.Promotion.StartedOn)" data-date-format="YYYY-MM-DD HH:mm:ss" placeholder="开始时间">
+                    </div>
+                    <p class="help-block">
+                        活动创建后，活动时间将无法修改
+                    </p>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="control-StoppedOn">结束时间</label>
+                        <input id="control-StopOn" name="StoppedOn" type="text" class="form-control date-time-picker" maxlength="19" value="@(Model.Promotion.StoppedOn)" data-date-format="YYYY-MM-DD HH:mm:ss" placeholder="结束时间">
+                    </div>
+                    <p class="help-block">
+                        活动创建后，活动时间将无法修改
+                    </p>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="control-Picture">活动图片</label>
+                        <input id="control-Picture" name="Picture" type="text" class="form-control" maxlength="300" value="@(Model.Promotion.Picture)" placeholder="活动图片">
+                    </div>
+                    <p class="help-block">
+                        限制在300个字符以内
+                    </p>
+                </div>
+                <div class="form-group fg-line">
+                    <label for="control-WarmUp">活动预热</label>
+                    <select id="control-WarmUp" name="WarmUp" class="form-control">
+                        @foreach (var o in Promotion.Activity.WarmUpDic)
+                        {
+                            if (Model.Promotion.WarmUp == o.Key)
+                            {
+                        <option value="@(o.Key)" selected="selected">@(o.Value)</option>
+                            }
+                            else
+                            {
+                        <option value="@(o.Key)">@(o.Value)</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="control-Type">活动类型</label>
+                        <select id="control-Type" name="Type" class="form-control">
+                            <option value="0">满元减</option>
+                            <option value="1">满件折</option>
+                        </select>
+                    </div>
+                    <p class="help-block">
+                        活动创建后，活动类型将无法修改
+                    </p>
+                </div>
+                    <div class="form-group">
+                        <label for="control-Discount">优惠规则</label>
+                        <div style="border: 1px solid #f0f0f0;">
+                            <table class="table table-border table-hover">
+                                <thead><tr><th>层级</th><th>规则</th><th>优惠</th></tr></thead>
+                                <tbody>
+                                    @for (var i = 0; i < 5; i++)
+                                    {
+                                        var threshold = string.Empty;
+                                        var discount = string.Empty;
+                                        var sendGift = false;
+                                        if (i < (Model.Promotion.Rules == null ? 0 : Model.Promotion.Rules.Count))
+                                        {
+                                            threshold = Model.Promotion.Rules[i].Threshold.ToString();
+                                            discount = Model.Promotion.Rules[i].Discount.ToString();
+                                            //sendGift = Model.Promotion.Rules[i].SendGift!=null;
+                                        }
+                                        <tr>
+                                            <td rowspan="2">
+                                                @(i + 1)
+                                                <input name="rules[@(i)].Index" type="hidden" value="@(i)" />
+                                            </td>
+                                            <td>
+                                                <p>
+                                                    <span class="extra">满</span>
+                                                    <input name="rules[@(i)].Threshold" type="text" class="form-control input-sm text-center" style="display:inline;width:150px;" maxlength="6" value="@(threshold)" o onkeyup=" this.value=this.value.replace(/\D/g, '' ); " />
+                                                    <span class="extra">元</span>
+                                                </p>
+                                            </td>
+                                            <td>
+                                                <p>
+                                                    <span class="extra">减</span>
+                                                    <input type="text" name="rules[@(i)].Discount" class="form-control input-sm text-center c-red f-500" value="@(discount)" style="display: inline-block; width: 80px;" maxlength="4" onkeyup=" this.value=this.value.replace(/\D/g, '' ); " />
+                                                    <span class="extra">元</span>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left:15px;">
+                                                <p>赠品</p>
+                                            </td>
+                                            <td>
+                                                <p>送券</p>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="help-block">
+                            最多可设置五级优惠
+                        </p>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary btn-lg btn-block waves-effect" onclick="submitForm(this);" data-loading-text="提交中...">
+                            提 交
+                        </button>
+                    </div>
+            }
+        </div>
+    </div>
+
+</div>
+@section css{
+    <style>
+        .extra {
+            margin: 0 10px;
+        }
+    </style>
+
+}
+
+@section js{
+    <script src="http://cdn.bootcss.com/moment.js/2.10.2/moment.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
+    <script>
+        function del(param) {
+            swal({
+                title: "确认删除？",
+                type: "warning",
+                showCancelButton: true,
+                cancelButtonText: "取 消",
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "删 除",
+                closeOnConfirm: false
+            }, function () {
+                $.post('/admin/article/delete', { param: param }, function (result) {
+                    if (result.Code == 0) {
+                        swal("删除成功!", '', "success");
+                    } else {
+                        swal("删除失败!", '', "warning");
+                    }
+                }, 'json');
+            });
+        }
+        function submitForm(btn) {
+            var form = btn.form;
+            $(btn).button('loading');
+            var param = $(form).serialize();
+            $.post(form.action, param, function (result) {
+                if (result.Status) {
+                    $(btn).button('reset');
+                    notify('操作成功', 'success');
+                }
+                else {
+                    $(btn).button('reset');
+                    notify(result.Message, 'danger');
+                }
+            }, "json");
+            return false;
+        }
+        $(function () {
+            $('.date-time-picker').datetimepicker();
+        });
+    </script>
+}

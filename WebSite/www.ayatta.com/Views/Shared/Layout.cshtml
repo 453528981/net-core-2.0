@@ -1,0 +1,156 @@
+﻿@model Model
+<!DOCTYPE html>
+<!--[if IE 9 ]><html class="ie9"><![endif]-->
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Material Admin</title>
+
+    <!-- Vendor CSS -->
+    <link href="@(WebSite.Static)/css/animate.min.css" rel="stylesheet">
+    <link href="@(WebSite.Static)/css/sweet-alert.css" rel="stylesheet">
+    <link href="@(WebSite.Static)/css/material-design-iconic-font.min.css" rel="stylesheet">
+    @*<link href="@(WebSite.Static)/css/malihu-custom-scrollbar.min.css" rel="stylesheet">*@
+    <link href="@(WebSite.Static)/css/bootstrap-select.min.css" rel="stylesheet">
+
+    @RenderSection("css", required: false)
+    <!-- CSS -->
+    <link href="@(WebSite.Static)/css/material.css" rel="stylesheet">
+    <link href="/css/app.css" rel="stylesheet">
+
+    @*<link href="/css/passport.css" rel="stylesheet">*@
+    @RenderSection("cssOmega", required: false)
+</head>
+
+<body>
+    <div id="nav-top">
+        @*@await Component.InvokeAsync("TopNav", 0)*@
+    </div>
+    <div id="header">
+        @*@await Component.InvokeAsync("Header", 0)*@
+    </div>
+    <div id="nav-main">
+        @*@await Component.InvokeAsync("MainNav", 0)*@
+    </div>
+    <div id="content" class="content-alt">
+        @RenderBody()
+    </div>
+    <div id="footer">
+        <div class="container">
+            
+        </div>
+    </div>
+
+    <!-- Page Loader -->
+    <!--
+        <div class="page-loader">
+            <div class="preloader pls-blue">
+                <svg class="pl-circular" viewBox="25 25 50 50">
+                    <circle class="plc-path" cx="50" cy="50" r="20" />
+                </svg>
+
+                <p>Please wait...</p>
+            </div>
+        </div>
+    -->
+    <!-- Older IE warning message -->
+    <!--[if lt IE 9]>
+        <div class="ie-warning">
+            <h1 class="c-white">Warning!!</h1>
+            <p>You are using an outdated version of Internet Explorer, please upgrade <br/>to any of the following web browsers to access this website.</p>
+            <div class="iew-container">
+                <ul class="iew-download">
+                    <li>
+                        <a href="http://www.google.com/chrome/">
+                            <img src="/img/browsers/chrome.png" alt="">
+                            <div>Chrome</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.mozilla.org/en-US/firefox/new/">
+                            <img src="/img/browsers/firefox.png" alt="">
+                            <div>Firefox</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://www.opera.com">
+                            <img src="/img/browsers/opera.png" alt="">
+                            <div>Opera</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.apple.com/safari/">
+                            <img src="/img/browsers/safari.png" alt="">
+                            <div>Safari</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">
+                            <img src="/img/browsers/ie.png" alt="">
+                            <div>IE (New)</div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <p>Sorry for the inconvenience!</p>
+        </div>
+    <![endif]-->
+    <div id="modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-label"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <!-- Javascript Libraries -->
+    @*<script src="@(WebSite.Static)/js/lodash.min.js"></script>*@
+    <script src="@(WebSite.Static)/js/jquery.min.js"></script>
+    <script src="@(WebSite.Static)/js/jquery.extend.js"></script>
+    <script src="@(WebSite.Static)/js/waves.min.js"></script>
+    @*<script src="@(WebSite.Static)/js/sweet-alert.min.js"></script>*@
+    <script src="@(WebSite.Static)/js/bootstrap.min.js"></script>
+    <script src="@(WebSite.Static)/js/bootstrap-growl.min.js"></script>
+    <script src="@(WebSite.Static)/js/bootstrap-select.min.js"></script>
+
+    @*<script src="@(WebSite.Static)/js/malihu-custom-scrollbar.min.js"></script>*@
+    <script src="@(WebSite.Static)/js/typeahead.bundle.min.js"></script>
+
+    <!-- Placeholder for IE9 -->
+    <!--[if IE 9 ]>
+        <script src="vendors/bower_components/jquery-placeholder/jquery.placeholder.min.js"></script>
+    <![endif]-->
+    @RenderSection("js", required: false)
+    <script src="@(WebSite.Static)/js/app.global.js"></script>
+    @*<script src="/js/passport.js"></script>
+          <script src="/js/functions.js"></script>
+        <script>
+            $(function () {
+                var suggests = new Bloodhound({
+                    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    prefetch: '/shared/suggest',
+                    remote: {
+                        url: '/shared/suggest/?q=%QUERY',
+                        wildcard: '%QUERY'
+                    }
+                });
+
+                $('#input-keyword').typeahead({
+                    hint: true,
+                    highlight: true,
+                    minLength: 1
+                }, {
+                    name: 'suggests',
+                    display: 'value',
+                    source: suggests
+                });
+            });
+
+
+        </script>*@
+    @RenderSection("jsOmega", required: false)
+</body>
+
+</html>

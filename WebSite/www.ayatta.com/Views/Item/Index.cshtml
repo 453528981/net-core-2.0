@@ -1,0 +1,196 @@
+﻿@model ItemModel.Index
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="item-detail clearfix">
+                <div>
+                    <div class="item-detail-property">
+                        <div class="item-detail-property-wrap">
+                            <div class="property">
+                                <h4>
+                                    @(Model.Item.Name)
+                                </h4>
+                                <h4 style="color: #e4393c">
+                                    @(Model.Item.Title)
+                                </h4>
+                                <div class="item-meta">
+                                    <dl class="dl-horizontal">
+                                        <dt>价格</dt>
+                                        <dd>
+                                            <em class="tm-yen">¥</em>
+
+                                            <span id="item-retail-price">@(Model.Item.GetRetailPriceText())</span>
+
+                                        </dd>
+                                        <dt>促销价</dt>
+                                        <dd>
+                                            <em class="tm-yen">¥</em>
+
+                                            <span id="item-price">@(Model.Item.GetPriceText(Platform.Pc))</span>
+
+                                        </dd>
+                                    </dl>
+
+                                </div>
+                                @if (Model.Item != null && Model.Item.SkuProps.Any())
+                                {
+                                    <div id="item-props" class="item-sku">
+                                        <dl class="dl-horizontal">
+                                            @foreach (var o in Model.Item.SkuProps)
+                                            {
+                                                <dt>@(o.Key) :</dt>
+                                                <dd>
+                                                    <ul class="list-inline">
+                                                        @foreach (var v in o.Value)
+                                                        {
+                                                            <li class="item-sku-prop">
+                                                                @if (Model.Item.PropImgs.ContainsKey(v.Key))
+                                                                {
+                                                                    var img = Model.Item.PropImgs[v.Key]+ "?width=36&height=36";
+                                                                    <a class="item-sku-prop-img zoom" href="javascript:void(0);" style="background: #FFFFFF url('@(img)') no-repeat scroll center center ;">
+                                                                        <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                                                    </a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a href="javascript:void(0);" title="@(v.Value)"><span>@(v.Value)</span></a>
+                                                                }
+                                                                <i></i>
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                </dd>
+                                            }
+                                        </dl>
+                                    </div>
+                                }
+                                <div>
+                                    <dl class="dl-horizontal">
+                                        <dt>数 量</dt>
+                                        <dd>
+                                            <div style="width: 100px; position: relative;">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon" onclick="app.item.onQuantityMinus();">
+                                                        <i class="glyphicon glyphicon-minus"></i>
+                                                    </span>
+                                                    <input id="item-quantity" class="form-control" type="text" title="请输入购买量" maxlength="3"
+                                                           value="1" onkeyup="app.item.onQuantityChange(this);" />
+                                                    <span class="input-group-addon" onclick="app.item.onQuantityPlus();">
+                                                        <i class="glyphicon glyphicon-plus"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="text-danger" style="position: absolute; left: 110px; top: 8px; display: block;
+                                                            width: 100%;">
+                                                    库存(<span id="item-stock">@(Model.Item.Stock)</span>)
+                                                </div>
+                                            </div>
+                                        </dd>
+                                    </dl>
+                                    <ul class="unstyled item-action">
+                                        <li class="item-action-buy"><a href="javascript:void(0);" onclick="app.item.buyNow(this);"></a></li>
+                                        <li class="item-action-add"><a href="javascript:void(0);" onclick="app.item.addToCart(this);"></a></li>
+                                    </ul>
+                                    <p>
+                                        ss
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item-detail-gallery">
+                        <div class="item-brand">
+                            <strong>@(Model.Item.BrandName)</strong>
+                        </div>
+                        <div class="gallery">
+                            <div class="picture">
+                                <img id="zoom" src="@(Model.Item.Picture)"
+                                     data-zoom-image="@(Model.Item.Picture)"
+                                     alt="@(Model.Item.Name)" />
+                                <div class="zoom-icon">
+                                </div>
+                            </div>
+                            <div class="gallery-zoom">
+                                <div id="gallery-zoom-thumb" class='gallery-zoom-thumb'>
+                                    @for (var i=0;i<Model.Item.Imgs.Count;i++)
+                                    {
+                                        var img = Model.Item.Imgs[i];
+                                        <a class="@(i == 0 ? "zoom-active" : string.Empty)" href='javascript:void(0);' data-image="@(img)" data-zoom-image="@(img)">
+                                            <img src="@(img)" />
+                                        </a>
+                                    }
+                                </div>
+
+                            </div>
+                            <div class="action">
+                                <div class="placeholder">
+                                    asdfasf
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="ald-skuRight" class="ald-skuRight ald ald-03054">
+                    <div class="ald-inner ">
+                        <div class="ald-hd">
+                            <s></s><span>看了又看</span>
+                        </div>
+                        <div class="ald-carousel">
+                            <div class="wrapCon">
+                            </div>
+                            <ul class="ald-switchable-trigger">
+                                <li class="ald-switchable-prev-btn">上一个</li>
+                                <li class="ald-switchable-next-btn">下一个</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-10">
+            <div style="margin-top: 10px;">
+                <div class="item-attr">
+                    <div class="item-attr-brand">
+                    </div>
+                    <ul class="item-attr-list unstyled clearfix">
+                        @foreach (var text in Model.Item.PropTexts)
+                        {
+                            <li>@Html.Raw(text) </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section cssOmega{
+    <link type="text/css" href="~/css/app.item.css" rel="stylesheet" />
+}
+@section js{
+    <!--
+    <script type="text/javascript" src="http://static.ayatta.com/js/jquery.slides.min.js?v=1605151240"></script>
+    <script type="text/javascript" src="http://static.ayatta.com/js/jquery.elevatezoom.js?v=1605151240"></script>
+    -->
+}
+@section jsOmega{
+    <script src="~/js/app.item.js"></script>
+    <script>
+        @{
+            var data=new{
+                id=Model.Item.Id,
+                skuId=Model.SkuId,
+                stock = Model.Item.Stock,
+                priceText =Model.Item.GetPriceText(Platform.Pc),
+                retailPriceText = Model.Item.GetRetailPriceText(),
+                selectedProps=Model.SelectdProps,
+                propImgs=Model.Item.PropImgs,
+                props=Model.Item.SkuProps,
+                skus= Model.Item.Skus.ToDictionary(o => o.PropId, o => new { id = o.Id,price = o.Price, count = o.Stock })
+            };
+        }
+        app.item.go(@Json.Serialize(data));
+    </script>
+}

@@ -1,0 +1,130 @@
+﻿@model HelpDetailModel
+
+<div class="container">
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>@(Model.Help.Id == 0 ? "添加" : "编辑") 帮助</h2>
+        </div>
+        <div class="card-body card-padding">
+            @using (Html.BeginForm())
+            {
+
+                @if (Model.Help.Id > 0)
+                {
+                    <div class="form-group">
+                        <div class="fg-line">
+                            <label for="input-Id">Id</label>
+                            <p class="form-control-static">@(Model.Help.Id)</p>
+                        </div>
+                    </div>
+                }
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-GroupId">分组Id</label>
+                        <input id="input-GroupId" name="GroupId" type="text" class="form-control" maxlength="5" value="@(Model.Help.GroupId)" placeholder="分组Id">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Title">标题</label>
+                        <input id="input-Title" name="Title" type="text" class="form-control" maxlength="20" value="@(Model.Help.Title)" placeholder="标题">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Link">链接</label>
+                        <input id="input-Link" name="Link" type="text" class="form-control" maxlength="300" value="@(Model.Help.Link)" placeholder="链接">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Summary">摘要</label>
+                        <input id="input-Summary" name="Summary" type="text" class="form-control" maxlength="300" value="@(Model.Help.Summary)" placeholder="摘要">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Content">内容</label>
+                        <textarea name="Content" class="summernote">@(Model.Help.Content)</textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Priority">排序</label>
+                        <input id="input-Priority" name="Priority" type="text" class="form-control" maxlength="300" value="@(Model.Help.Priority)" placeholder="排序">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Extra">备注</label>
+                        <input id="input-Extra" name="Extra" type="text" class="form-control" maxlength="300" value="@(Model.Help.Extra)" placeholder="备注">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <label for="input-Status">状态</label>
+                        <select id="input-Status" name="Status" class="form-control">
+                            <option value="true" @(Model.Help.Status ? "selected" : string.Empty)>可用</option>
+                            <option value="false" @(!Model.Help.Status ? "selected" : string.Empty)>不可用</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary btn-lg btn-block waves-effect" onclick="submitForm(this);" data-loading-text="提交中...">
+                        提 交
+                    </button>
+
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@section cssOmega{
+    <link href="@(WebSite.Static)/css/summernote.min.css" rel="stylesheet">
+}
+
+@section js{
+
+    <script src="@(WebSite.Static)/js/summernote.min.js"></script>
+
+}
+@section jsOmega{
+
+
+    <script type="text/javascript">
+        function submitForm(btn) {
+            var form = btn.form;
+            $(btn).button('loading');
+            var param = $(form).serialize();
+            $.post(form.action, param, function (r) {
+                if (r.status) {
+                    $(btn).button('reset');
+                    //notify('操作成功', 'success');
+                    /*
+                    if (result.Extra != null && result.Extra != "") {
+                        alert(result.Extra + "不存在");
+                    }
+                    if (result.Data != null) {
+                        setTimeout(function () {
+                            window.location = "/Trial/TrialPlanDetail/" + result.Data;
+                        }, 500);
+                    } else {
+                        window.location.reload();
+                    }
+                    */
+                }
+                else {
+                    $(btn).button('reset');
+                    //notify(result.Message, 'danger');
+                }
+            }, "json");
+            return false;
+        }
+
+
+        $(document).ready(function () {
+            $('.summernote').summernote();
+        });
+    </script>
+}

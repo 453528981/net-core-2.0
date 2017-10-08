@@ -1,0 +1,216 @@
+﻿@model AddressDetailModel
+<div>
+    @using (Html.BeginForm(FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                &times;
+            </button>
+            <h4 class="modal-title">
+                @(Model.Address.Id > 0 ? "编辑收货地址" : "新增收货地址")
+            </h4>
+        </div>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="consignee" class="col-sm-2 control-label">收货人</label>
+                    <div class="col-sm-10">
+                        <div class="fg-line">
+                            <input type="text" class="form-control input-sm" id="consignee" name="consignee" maxlength="20" placeholder="收货人" value="@(Model.Address.Consignee)">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="companyName" class="col-sm-2 control-label">公司名称</label>
+                    <div class="col-sm-10">
+                        <div class="fg-line">
+                            <input type="text" class="form-control input-sm" id="companyName" name="companyName" maxlength="50" placeholder="公司名称（可为空）" value="@(Model.Address.CompanyName)">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">省/市/区</label>
+                    <div class="col-sm-10">
+                        <div>
+                            <select id="province" class="form-control input-medium" onchange="provinceChanged(this)">
+                                @if (Model.Address.Id == 0)
+                                {
+                                    <option value=''>请选择</option>
+                                }
+
+                                @foreach (var o in Model.Provinces)
+                                {
+                                    if (o.Id == Model.Address.ProvinceId)
+                                    {
+                                        <option value="@(o.Id)" selected="selected">@(o.Name)</option>
+
+                                    }
+                                    else
+                                    {
+
+                                        <option value="@(o.Id)">@(o.Name)</option>
+                                    }
+
+                                }
+                            </select>
+
+
+                            <select id="city" class="form-control input-medium" onchange="cityChanged(this)">
+                                @if (Model.Address.Id == 0)
+                                {
+                                    <option value=''>请选择</option>
+                                }
+                                @foreach (var o in Model.Citys)
+                                {
+                                    if (o.Id == Model.Address.CityId)
+                                    {
+                                        <option value="@(o.Id)" selected="selected">@(o.Name)</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@(o.Id)">@(o.Name)</option>
+                                    }
+                                }
+                            </select>
+                            <select id="district" name="regionId" class="form-control input-medium">
+                                @if (Model.Address.Id == 0)
+                                {
+                                    <option value=''>请选择</option>
+                                }
+                                @foreach (var o in Model.Districts)
+                                {
+                                    if (o.Id == Model.Address.RegionId)
+                                    {
+                                        <option value="@(o.Id)" selected="selected">@(o.Name)</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@(o.Id)">@(o.Name)</option>
+                                    }
+                                }
+                            </select>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="street" class="col-sm-2 control-label">详细地址</label>
+                    <div class="col-sm-10">
+                        <div class="fg-line">
+                            <input type="text" class="form-control input-sm" id="street" name="street" maxlength="120" placeholder="街道门牌号（不需要重复填写省/市/区）" value="@(Model.Address.Street)">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="postalCode" class="col-sm-2 control-label">邮政编码</label>
+                    <div class="col-sm-10">
+                        <div class="fg-line">
+                            <input type="text" class="form-control input-sm" id="postalCode" name="postalCode" maxlength="6" placeholder="邮政编码" value="@(Model.Address.PostalCode)">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="PostalCode" class="col-sm-2 control-label">联系方式</label>
+                    <div class="col-sm-10">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="mobile">
+                                    移动电话
+                                </label>
+                                <div class="fg-line">
+                                    <input type="text" id="mobile" name="mobile" class="form-control input-small" maxlength="11" placeholder="移动电话"
+                                           value="@(Model.Address.Mobile)" />
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+                                <label for="phone">
+                                    固定电话
+                                </label>
+                                <div class="fg-line">
+                                    <input type="text" id="phone" name="phone" class="form-control input-medium" maxlength="18" placeholder="固定电话"
+                                           value="@(Model.Address.Phone)" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <p id="help-block-for-contact" class="help-block">
+                                    移动电话、固定电话必填一项！
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <p id="message" class="pull-left">
+                </p>
+                <button type="button" class="btn btn-primary" onclick="submitForm(this.form)">
+                    确 认
+                </button>
+            </div>
+        }
+        else
+        {
+            <div>登录</div>
+
+        }
+
+    }
+</div>
+
+<script type="text/javascript">
+    function provinceChanged(obj) {
+        var val = $(obj).val();
+        if (val == "") {
+            return;
+        }
+        $("#city").html("<option value=''>请选择</option>");
+        $("#district").html("<option value=''>请选择</option>");
+        $.getJSON("/global/region/" + val, function (r) {
+            var html = [];
+            var len = r.length;
+            html.push("<option value=''>请选择</option>");
+            for (var i = 0; i < len; i++) {
+                var o = r[i];
+                html.push("<option value=" + o.id + ">" + o.name + "</option>");
+            }
+            $("#city").html(html.join(""));
+            //$("#city").trigger("change");
+        });
+
+    }
+
+    function cityChanged(obj) {
+        var val = $(obj).val();
+
+        $("#district").html('');
+        $.getJSON("/global/region/" + val, function (r) {
+            var html = [];
+            var len = r.length;
+            html.push("<option value=''>请选择</option>");
+
+            for (var i = 0; i < len; i++) {
+                var o = r[i];
+                html.push("<option value=" + o.id + ">" + o.name + "</option>");
+            }
+            $("#district").html(html.join(""));
+        });
+
+    }
+
+
+    function submitForm(form) {
+        var param = $(form).serialize();
+        $.postJSON(form.action, param, function (result) {
+            if (result.status == false) {
+                $('#message', form).css('color', 'red').html(result.Message);
+            }
+            else {
+                $('#message', form).css('color', 'green').html("保存成功！");
+            }
+        });
+    }
+</script>

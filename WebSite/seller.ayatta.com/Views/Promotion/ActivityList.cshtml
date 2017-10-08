@@ -1,0 +1,171 @@
+﻿@model PromotionModel.ActivityList
+    <div class="container">
+        <form action="?" method="GET">
+            <div class="card">
+                <div class="card-header ch-alt">
+                    <h2>
+                        店铺优惠
+                        <small>“店铺优惠”是一款发起店铺内的营销活动、商家可以轻易设置满减/满送/满折，并限定活动范围，是全店商品，还是商家精挑细选的部分商品。</small>
+                    </h2>
+                    <div class="actions">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-info waves-effect waves-button waves-float">新 增</button>
+                            <button type="button" class="btn btn-info dropdown-toggle waves-effect waves-button waves-float" data-toggle="dropdown" aria-expanded="false">
+                                <span class="caret"></span>
+                                <span class="sr-only">Split button dropdowns</span>
+                            </button>
+                            <ul class="dropdown-menu pull-right" role="menu">
+                                <li><a href="~/promotion/activity-detail/0?global=true">店铺活动</a></li>
+                                <li><a href="~/promotion/activity-detail/0">商品活动</a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    @*<a href="~/admin/article/detail" class="btn bgm-red btn-float waves-effect" title="添 加"><i class="md md-add"></i></a>*@
+                </div>
+                <div class="card-body">
+                    <ul class="tab-nav tn-justified tn-icon" style="overflow: hidden; outline: none;">
+                        <li role="presentation" class="@(!Model.Global ? "active" : string.Empty)">
+                            <a class="col-sx-6" href="?">
+                                <i class="md  icon-tab"></i>商品活动
+                            </a>
+                        </li>
+                        <li role="presentation" class="@(Model.Global ? "active" : string.Empty)">
+                            <a class="col-xs-6" href="?global=true">
+                                <i class="md  icon-tab"></i>店铺活动
+                            </a>
+                        </li>
+
+                    </ul>
+
+                    <div class="p-20">
+                        @if (Model.Global)
+                        {
+                            <div class="alert alert-warning" role="alert">参与店铺活动的商品包括：店内未参加其它活动的所有商品；活动生效时段内新发布的商品以及其他活动失效后释放的商品。 </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-warning" role="alert">同一店铺最多可同时支持50个商品活动。 </div>
+                        }
+                        <div class="row">
+                            <div class="col-xs-1">
+                                <div class="form-group fg-float">
+                                    <div class="fg-line">
+                                        <input type="text" name="Id" class="form-control" value="@(Model.Id)">
+                                    </div>
+                                    <label class="fg-label">活动编号</label>
+                                </div>
+                            </div>
+                            <div class="col-xs-3">
+                                <div class="form-group fg-float">
+                                    <div class="fg-line">
+                                        <input type="text" name="Name" class="form-control" value="@(Model.Name)">
+                                    </div>
+                                    <label class="fg-label">活动名称</label>
+                                </div>
+                            </div>
+                            <div class="col-xs-2">
+                                <div class="form-group fg-float">
+                                    <div class="fg-line">
+                                        <input type="text" name="StartedOn" class="form-control date-picker" maxlength="19" value="@(Model.StartedOn)" data-toggle="dropdown" aria-expanded="false">
+                                    </div>
+                                    <label class="fg-label">开始时间</label>
+                                </div>
+                            </div>
+                            <div class="col-xs-2">
+                                <div class="form-group fg-float">
+                                    <div class="fg-line">
+                                        <input type="text" name="StoppedOn" class="form-control date-picker" maxlength="19" value="@(Model.StoppedOn)" data-toggle="dropdown" aria-expanded="false">
+                                    </div>
+                                    <label class="fg-label">结束时间</label>
+                                </div>
+                            </div>
+                            <div class="col-xs-2">
+                                <div class="fg-line form-group">
+                                    <button type="submit" class="btn btn-info btn-icon" title="查找"><i class="md md-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive" tabindex="1" style="overflow: hidden; outline: none;">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>名 称</th>
+                                <th>详 情</th>
+                                <th>时 间</th>
+                                <th>状 态</th>
+                                <th>操 作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var o in Model.Promotions)
+                            {
+                                <tr>
+                                    <td>@(o.Id)</td>
+                                    <td>@(o.Name)</td>
+                                    <td>@(o.Title)</td>
+                                    <td>@Html.Raw(o.StartedOn.ToString("yyyy-MM-dd </br>HH:mm:ss"))</td>
+                                    <td>@(o.StatusText)</td>
+                                    <td>
+                                        <a href="~/promotion/activity-detail/@(o.Id)" class="btn bgm-cyan btn-xs waves-effect"><i class="md md-mode-edit"></i></a>
+                                        <button type="button" class="btn bgm-teal btn-xs waves-effect m-l-10" onclick="del(@(o.Id));"><i class="md  md-delete"></i></button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div id="data-table-selection-footer" class="bootgrid-footer container-fluid">
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <ul class="pagination">
+                                <li class="first disabled" aria-disabled="true"><a href="#first" class="button"><i class="md md-more-horiz"></i></a></li>
+                                <li class="prev disabled" aria-disabled="true"><a href="#prev" class="button"><i class="md md-chevron-left"></i></a></li>
+                                <li class="page-1 active" aria-disabled="false" aria-selected="true"><a href="#1" class="button">1</a></li>
+                                <li class="page-2" aria-disabled="false" aria-selected="false"><a href="#2" class="button">2</a></li>
+                                <li class="next" aria-disabled="false"><a href="#next" class="button"><i class="md md-chevron-right"></i></a></li>
+                                <li class="last" aria-disabled="false"><a href="#last" class="button"><i class="md md-more-horiz"><i></i></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 infoBar">
+                            <div class="infos">Showing 1 to 10 of 20 entries</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    @section css{
+
+    }
+
+    @section js{
+        <script src="http://cdn.bootcss.com/moment.js/2.10.2/moment.min.js"></script>
+        <script src="http://cdn.bootcss.com/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
+        <script>
+            function del(param) {
+                swal({
+                    title: "确认删除？",
+                    type: "warning",
+                    showCancelButton: true,
+                    cancelButtonText: "取 消",
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "删 除",
+                    closeOnConfirm: false
+                }, function () {
+                    $.post('/admin/article/delete', { param: param }, function (result) {
+                        if (result.Code == 0) {
+                            swal("删除成功!", '', "success");
+                        } else {
+                            swal("删除失败!", '', "warning");
+                        }
+                    }, 'json');
+                });
+            }
+        </script>
+    }

@@ -1,0 +1,123 @@
+﻿@model AddressListModel
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h2>
+                收货地址管理
+                <small>
+                    最多添加 8 个收货地址，您还可以添加
+                    @(8 - Model.Addresses.Count)
+                    个收货地址。
+                </small>
+            </h2>
+        </div>
+
+        <div class="card-body  table-responsive">
+            <table class="table table-striped table-hover">
+                <tbody>
+                    @for (var i = 0; i < Model.Addresses.Count; i++)
+                    {
+                        var item = Model.Addresses[i];
+                        <tr>
+
+                            <td>
+                                <div>
+                                    <p>
+                                        <strong title="@(item.Consignee)">@(item.Consignee)</strong> <span>
+                                            (@(item.Mobile)
+                                            @(item.Phone))
+                                        </span>
+                                    </p>
+                                    <p>
+                                        @item.Address (@item.PostalCode)
+                                    </p>
+                                </div>
+                            </td>
+                            <td>
+                                @if (item.IsDefault)
+                                {
+                                    <span>默认地址</span>
+                                }
+                                else
+                                {
+                                    <a onclick="setDefaultAddress(@item.Id)" href="javascript:void(0);" title="设为默认">
+                                        设为默认
+                                    </a>
+                                }
+                            </td>
+                            <td>
+                                <a title="编辑" href="/address/detail/@(item.Id)" data-trigger="modal">
+                                    <i class="zmdi zmdi-edit"></i>编辑
+                                </a>
+                                <a title="删除" onclick="deleteAddress(@item.Id)" href="javascript:void(0);">
+                                    <i class="zmdi zmdi-delete"></i>删除
+                                </a>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+            @if (Model.Addresses.Count < 8)
+            {
+                <div class="address-add-container">
+                    <a href="/address/detail/0" data-trigger="modal">
+                        添加收货地址
+                    </a>
+                </div>
+            }
+
+        </div>
+
+    </div>
+</div>
+@section js
+{
+    <script>
+        function setDefaultAddress(id) {
+            $.postJSON('/address/set-default/' + id, function (result) {
+                if (result.status == true) {
+                    window.location.reload();
+                } else {
+                    alert(result.Message);
+                }
+            });
+        }
+
+        function deleteAddress(id) {
+            swal({
+                title: "确认删除？",
+                type: "warning",
+                showCancelButton: true,
+                cancelButtonText: "取 消",
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "删 除",
+                closeOnConfirm: false
+            }, function () {
+                $.postJSON('/address/delete/' + id, function (result) {
+                    if (result.status) {
+                        swal("删除成功!", '', "success");
+                        window.location.reload();
+                    } else {
+                        swal("删除失败!", '', "warning");
+                    }
+                });
+            });
+        }
+
+    </script>
+}
+@section cssOmega
+{
+    <style>
+        .table-hover > tbody > tr:hover {
+            background-color: #ECF9FF !important;
+        }
+
+        .address-add-container {
+            line-height: 60px;
+            text-align: center;
+            border-top: 1px dashed #E5E5E5;
+        }
+    </style>
+}

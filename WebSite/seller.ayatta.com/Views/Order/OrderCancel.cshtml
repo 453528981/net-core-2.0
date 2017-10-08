@@ -1,0 +1,85 @@
+﻿@model Result<OrderStatus>
+<div>
+
+    @using (Html.BeginForm())
+    {
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                &times;
+            </button>
+            <h4 class="modal-title">
+                关闭交易
+            </h4>
+        </div>
+        <div class="modal-body">
+            @if (Model.Status)
+            {
+            <p>
+                关闭交易？请您确认已经通知买家，并已达成一致意见。您单方面关闭交易，将可能导致买家投诉。
+            </p>
+            <p>
+                <strong>请选择关闭该交易的理由：</strong>
+            </p>
+            <p>
+                <select name="reason" style="width: 40%;">
+                    <option value="联系不到买家">联系不到买家</option>
+                    <option value="买家不想买了">买家不想买了</option>
+                    <option value="买家已经通过银行汇款">买家已经通过银行汇款</option>
+                    <option value="买家已经通过网上银行直接付款">买家已经通过网上银行直接付款</option>
+                    <option value="已同城见面交易">已同城见面交易</option>
+                    <option value="暂时缺货">暂时缺货</option>
+                    <option value="其他原因">其他原因</option>
+                </select>
+            </p>
+            <p>
+                拍下后减库存的商品，在关闭交易后，系统会自动恢复商品库存，但不会影响已下架商品的状态。
+            </p>
+            }
+            else
+            {
+            <div class="status-box status-box-warm-error">
+                <div class="status-icon">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <i class="icon-remove-sign icon-3x"></i>
+                        </div>
+                        <div class="col-md-10">
+                            <strong>@Model.Message</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+        <div class="modal-footer">
+            <p id="message" class="pull-left color-red">
+            </p>
+            @if (Model.Status)
+            {
+            <button type="button" class="btn btn-primary" onclick="submitForm(this.form)">
+                确 认
+            </button>
+            }
+        </div>
+    }
+
+</div>
+@if (Model.Status)
+{
+    <script type="text/javascript">
+        function submitForm(form) {
+            var param = $(form).serialize();
+            $.postJSON(form.action, param, function (result) {
+                if (result.Status == false) {
+                    $('#message', form).css('color', 'red').html(result.Message);
+                }
+                else {
+                    $('#message', form).css('color', 'green').html("关闭交易成功！");
+                }
+            });
+        }
+        $(function () {
+            $('select').select2();
+        });
+    </script>
+}

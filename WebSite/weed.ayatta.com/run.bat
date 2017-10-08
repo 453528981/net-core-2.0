@@ -1,0 +1,1 @@
+dotnet run E://git/reps/ayatta/WebSite/i.ayatta.com

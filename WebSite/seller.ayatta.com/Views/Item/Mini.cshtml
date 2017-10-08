@@ -1,0 +1,157 @@
+@model ItemMini
+<div class="table-responsive">
+
+    @using (Html.BeginForm())
+    {
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                &times;
+            </button>
+            <h4 class="modal-title">
+                商品编辑
+            </h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <input id="item-name" name="item.name" type="text" class="form-control" value="@(Model.Name)" placeholder="商品名称" onkeyup="checkName(this);" />
+                <p class="help-block">商品名称（60字节以内,一个中文两字节）<span id="item-name-len"></span></p>
+            </div>
+            <div class="form-group">
+                <input id="item-title" name="item.title" type="text" class="form-control" value="@(Model.Title)" placeholder="商品标题" onkeyup="checkTitle(this);" />
+                <p class="help-block">商品标题（为空或30字以内）</p>
+            </div>
+            @if (Model.Skus.Count > 0)
+            {
+                var i = 0;
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>规 格</th>
+                                <th width="100">数 量</th>
+                                <th width="120">市场价格</th>
+                                <th width="120">价格(PC/WAP)</th>
+                                <th width="100">价格(APP)</th>
+                                <th width="100">编 号</th>
+                                <th width="100">条形码</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var o in Model.Skus.Where(x => x.Status != Prod.Status.Deleted))
+                            {
+                                <tr>
+                                    <td>
+                                        <p class="form-control-static">
+                                            @foreach (var s in o.Props)
+                                            {
+                                                <span>@(s.VName)</span>
+                                            }
+                                        </p>
+                                        <input name="item.skus[@(i)].id" type="hidden" value='@(o.Id)' />
+                                    </td>
+
+                                    <td>
+                                        <input name="item.skus[@(i)].stock" type="text" maxlength="8" value='@(o.Stock)' class="form-control input-sm" onkeyup="this.value=this.value.replace(/\D/g, '');" />
+                                    </td>
+                                    <td>
+                                        <input name="item.skus[@(i)].retailPrice" type="text" maxlength="8" value='@(o.RetailPrice.ToString("N"))' class="form-control input-sm" onkeyup="checkPrice(this);" />
+                                    </td>
+                                    <td>
+                                        <input name="item.skus[@(i)].price" type="text" maxlength="8" value='@(o.Price.ToString("N"))' class="form-control input-sm" onkeyup="checkPrice(this);" />
+                                    </td>
+                                    <td>
+                                        <input name="item.skus[@(i)].appPrice" type="text" maxlength="8" value='@(o.AppPrice.ToString("N"))' class="form-control input-sm" onkeyup="checkPrice(this);" />
+                                    </td>
+                                    <td>
+                                        <input name="item.skus[@(i)].code" maxlength="8" value='@(o.Code)' class="form-control input-sm" onkeyup="checkCode(this);" />
+                                    </td>
+                                    <td>
+                                        <input name="item.skus[@(i)].barcode" maxlength="12" value='@(o.Barcode)' class="form-control input-sm" onkeyup="checkCode(this);" />
+                                    </td>
+                                </tr>
+                                i++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="form-group">
+                    <input id="item-name" name="item.code" type="text" class="form-control" value="@(Model.Code)" placeholder="商品编号" onkeyup="checkCode(this);" />
+                    <p class="help-block">商品编号（20个字符以内）</p>
+                </div>
+                <div class="form-group">
+                    <input id="item-name" name="item.barcode" type="text" class="form-control" value="@(Model.Barcode)" placeholder="商品条形码" onkeyup="checkCode(this);" />
+                    <p class="help-block">商品条形码（20个字符以内）</p>
+                </div>
+                <div class="form-group">
+                    <label for="item-stock">数 量</label>
+                    <input id="item-stock" name="item.stock" type="text" class="form-control" maxlength="8" value="@(Model.Stock)" placeholder="商品数量" onkeyup="this.value=this.value.replace(/\D/g, '');" />
+                    <p class="help-block">商品数量 请如实填写（取值范围：0-99999999）</p>
+                </div>
+                <div class="form-group">
+                    <input id="item-price" name="item.price" type="text" class="form-control" maxlength="8" value="@(Model.Price.ToString("N"))" placeholder="商品价格(PC/WAP)" onkeyup="checkPrice(this);" />
+                    <p class="help-block">PC/WAP端商品价格 以元为单位，精确到小数点后两位（取值范围：0-99999999）</p>
+                </div>
+                <div class="form-group">
+                    <input id="item-appPrice" name="item.appPrice" type="text" class="form-control" maxlength="8" value="@(Model.AppPrice.ToString("N"))" placeholder="商品价格(APP)" onkeyup="checkPrice(this);" />
+                    <p class="help-block">APP端商品价格 以元为单位，精确到小数点后两位（取值范围：0-99999999）</p>
+                </div>
+            }
+
+        </div>
+        <div class="modal-footer">
+            <p id="message" class="pull-left color-red">
+            </p>
+            <button type="button" class="btn btn-primary" onclick="submitForm(this)">
+                保 存
+            </button>
+        </div>
+    }
+
+</div>
+<script type="text/javascript">
+    function checkPrice(obj) {
+        var val = obj.value.replace(/[^0-9\.]/g, '').replace(/^[\.]/g, '').replace(/[\.*]$/g, '');
+
+        var reg = /^-?\d+(\.\d{1,2})?$/
+        if (!reg.test(val)) {
+            obj.value = val = val == '' ? 0 : parseFloat(val);
+        }
+        else {
+            obj.value = val;
+        }
+    }
+
+    function checkName(obj) {
+        var val = obj.value = obj.value.replace(/[^\u4e00-\u9fa5\A-Za-z0-9\-\/\.\'\s]/g, '')
+          .replace(/\-+/g, '-').replace(/\/+/g, '/').replace(/\.+/g, '.').replace(/\'+/g, '\'').replace(/\s+/g, ' ')
+          .replace(/^[\-\/\.\']/g, '').replace(/(^s*)|(s*$)/g, "");
+
+        var len = val.Length("gbk");
+        if (len > 60) {
+            $(obj).next('.help-block').addClass('.text-danger');
+            return;
+        }
+        var x = 60 - len;
+        $('#item-name-len').html('还可以输入' + x + '字节');
+    }
+    function checkTitle(obj) {
+    }
+    function checkCode(obj) {
+        obj.value = obj.value.replace(/[^A-Za-z0-9]/g, '')
+    }
+    function submitForm(obj) {
+        var form = obj.form;
+        var param = $(form).serialize();
+        $.postJSON(form.action, param, function (result) {
+            console.log(result);
+            if (result.Status) {
+
+            } else {
+                // $('#message', form).css('color', 'red').html(result.Message);
+            }
+        });
+    }
+</script>
