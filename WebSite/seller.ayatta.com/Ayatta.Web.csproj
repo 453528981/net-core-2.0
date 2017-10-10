@@ -5,6 +5,13 @@
     <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Views\Order\**" />
+    <Content Remove="Views\Order\**" />
+    <EmbeddedResource Remove="Views\Order\**" />
+    <None Remove="Views\Order\**" />
+  </ItemGroup>
+
   <!--<ItemGroup>
     <Compile Remove="wwwroot\ts\**" />
     <Content Remove="wwwroot\ts\**" />
@@ -13,14 +20,15 @@
   </ItemGroup>-->
 
   <ItemGroup>
+    <Content Remove="Views\Item\Catg.cshtml" />
+    <Content Remove="Views\Item\Index.cshtml" />
+    <Content Remove="Views\Item\Weed.cshtml" />
     <Content Remove="wwwroot/css\bootstrap-select.min.css" />
     <Content Remove="wwwroot/js\dialog.js" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="wwwroot\" />
-    <Folder Include="wwwroot\css\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />

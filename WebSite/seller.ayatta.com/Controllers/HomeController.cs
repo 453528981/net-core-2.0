@@ -14,12 +14,21 @@ namespace Ayatta.Web.Controllers
         {
         }
 
-        [HttpGet("/")]
-        public IActionResult Index()
+        [HttpGet("/test")]
+        public IActionResult Test(int id = 1)
+        {           
+            return Content("test");
+        }
+
+        [HttpGet("/sign-in")]
+        public IActionResult Index(int id=1)
         {
+            var user = DefaultStorage.UserGet(id);
+
             var ci = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
-            ci.AddClaim(new Claim(ClaimTypes.Name, "1"));
-            ci.AddClaim(new Claim(ClaimTypes.NameIdentifier, "420303865@qq.com"));
+            ci.AddClaim(new Claim(ClaimTypes.Name, user.Name));
+            ci.AddClaim(new Claim("id", user.Id.ToString()));
+            ci.AddClaim(new Claim("guid", user.Guid));
 
             var cp = new ClaimsPrincipal(ci);
 
@@ -27,7 +36,19 @@ namespace Ayatta.Web.Controllers
             return View();
         }
 
-        
+        /// <summary>
+        /// 退出
+        /// </summary>
+        /// <param name="redirect">退出后跳转Url</param>
+        /// <returns></returns>
+        [HttpGet("/sign-out")]
+        public IActionResult SignOut(string redirect = null)
+        {
+
+            base.SignOut();
+            return Redirect(!string.IsNullOrEmpty(redirect) ? redirect : "/");
+        }
+
 
     }
 

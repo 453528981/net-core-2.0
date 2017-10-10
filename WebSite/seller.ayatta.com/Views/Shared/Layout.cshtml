@@ -19,6 +19,7 @@
     <!-- CSS -->
     <link href="@(WebSite.Static)/css/material.css" rel="stylesheet">
     <link href="@(WebSite.Static)/css/material-ext.css" rel="stylesheet">
+    <link href="/css/app.css" rel="stylesheet">
     @RenderSection("cssOmega", required: false)
 </head>
 
@@ -406,8 +407,8 @@
     <!--[if IE 9 ]>
         <script src="vendors/bower_components/jquery-placeholder/jquery.placeholder.min.js"></script>
     <![endif]-->
-    @RenderSection("js", required: false)
     <script src="@(WebSite.Static)/js/app.global.js"></script>
+    @RenderSection("js", required: false)
     @*<script src="/js/functions.js"></script>
         <script src="/js/demo.js"></script>*@
     @RenderSection("jsOmega", required: false)

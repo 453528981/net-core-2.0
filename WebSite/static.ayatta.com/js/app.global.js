@@ -77,7 +77,7 @@ String.prototype.isEmpty = function() {
 
 String.prototype.isMobile = function() {
     var val = this.replace(/\s+/g, "");
-    var reg = /(^0{0,1}13[0-9]{9}$)|(13\d{9}$)|(15[0135-9]\d{8}$)|(18[267]\d{8}$)/;
+    var reg = /(^0{0,1}13[0-9]{9}$)|(13\d{9}$)|(15[0135-9]\d{8}$)|(18[26789]\d{8}$)/;
     return val.length == 11 && reg.exec(val);
 };
 

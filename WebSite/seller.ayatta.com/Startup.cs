@@ -1,14 +1,11 @@
-﻿using MediatR;
-//using Ayatta.Event;
-using System.Reflection;
-using System.Text.Unicode;
-using System.Text.Encodings.Web;
+﻿//using Ayatta.Event;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Ayatta.Web
 {
@@ -37,6 +34,20 @@ namespace Ayatta.Web
 
             services.AddDefaultStorage();
 
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.Cookie.Name = "x-auth";
+                    options.Cookie.HttpOnly = true;
+
+                    options.Cookie.Path = "/";
+
+                    options.LoginPath = "/sign-in";
+                    options.LogoutPath = "/sign-out";
+                    options.AccessDeniedPath = "/account/denied";
+                    options.ReturnUrlParameter = "redirect";
+                });
+
             services.AddAntiforgery(options =>
             {
                 options.HeaderName = "X-XSRF-TOKEN";
@@ -60,6 +71,8 @@ namespace Ayatta.Web
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseAuthentication();
+
             app.UseStaticFiles();
             app.UseSession();
             app.UseMvc();

@@ -42,10 +42,10 @@
                                 <i class="input-helper"></i>
 
                             </label>
-                            <strong class="c-pink">祥织男装专营店</strong>
+                            <strong class="c-pink">卖家：{{basket.sellerName}}</strong>
                             <span>
-                                <span class="m-l-10 c-purple">全场满68元包邮</span>
-                                <span class="m-l-10 c-red">已享优惠:包邮</span>
+                                <!--<span class="m-l-10 c-purple">全场满68元包邮</span>
+                                <span class="m-l-10 c-red">已享优惠:包邮</span>-->                               
                             </span>
                         </td>
 
@@ -74,13 +74,12 @@
                                 <div class="media-body">
                                     <h4 class="media-heading">{{sku.name}}</h4>
                                 </div>
-                                <div>asf</div>
+                                <div></div>
                             </div>
 
                         </td>
-                        <td class="c-gray">
-                            {{set props=sku.propTexts}}
-                            {{each props prop}}
+                        <td class="c-gray">                            
+                            {{each sku.propTexts prop}}
                             <span>{{prop}}</span><br />
                             {{/each}}
 
@@ -108,7 +107,7 @@
                         <td class="text-center">
                             <strong class="c-deeporange">￥{{(sku.price*sku.quantity).toFixed(2)}}</strong>
                             <br />
-                            <span class="c-gray">(0.24kg)</span>
+                           <!--<span class="c-gray">(0.24kg)</span>-->
                         </td>
                         <td class="text-center">
                             <span>收 藏</span>
@@ -140,7 +139,7 @@
                                 <div class="media-body">
                                     <h4 class="media-heading">{{item.name}}</h4>
                                 </div>
-                                <div>asf</div>
+                                <div></div>
                             </div>
 
                         </td>
@@ -168,7 +167,7 @@
                         <td class="text-center">
                             <strong class="c-deeporange">￥{{(item.price*item.quantity).toFixed(2)}}</strong>
                             <br />
-                            <span class="c-gray">(0.24kg)</span>
+                            <!--<span class="c-gray">(0.24kg)</span>-->
                         </td>
                         <td class="text-center">
                             <span>收 藏</span>

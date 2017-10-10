@@ -80,11 +80,11 @@ namespace Ayatta.Web.Controllers
                 result.Message = "参数错误(CatgId)";
                 return Json(result);
             }
-            //if (!User)
-            //{
-            //    result.Message = "未登录或登录超时";
-            //    return Json(result);
-            //}
+            if (!User)
+            {
+                result.Message = "未登录或登录超时";
+                return Json(result);
+            }
 
             var form = Request.Form;
             var time = DateTime.Now;
@@ -286,7 +286,7 @@ namespace Ayatta.Web.Controllers
                     sku.PropStr = propstr.TrimEnd(';');
                     sku.SaleCount = 0;
                     sku.Status = itemStatus;
-                    sku.SellerId = 1;// User.Id;
+                    sku.SellerId = User.Id;
                     sku.CreatedOn = time;
                     sku.ModifiedBy = User.Name;
                     sku.ModifiedOn = time;
@@ -374,8 +374,8 @@ namespace Ayatta.Web.Controllers
             item.ModifiedOn = time;
 
             item.Skus = skus;
-            item.SellerId = 1;// User.Id;
-            item.SellerName = "test";// User.Name;
+            item.SellerId =  User.Id;
+            item.SellerName =  User.Name;
             item.Desc.CreatedOn = time;
             item.Desc.ModifiedBy =User.Name;
             item.Desc.ModifiedOn = time;

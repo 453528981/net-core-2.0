@@ -83,7 +83,7 @@ namespace Ayatta.Extension
 
         public static bool IsMobile(this string target)
         {
-            const string reg = @"^(13\d{9}$)|(15[0135-9]\d{8}$)|(18[2679]\d{8})$";
+            const string reg = @"^(13\d{9}$)|(15[0135-9]\d{8}$)|(18[26789]\d{8})$";
             return !string.IsNullOrEmpty(target) && IsMatch(target, reg);
         }
 
